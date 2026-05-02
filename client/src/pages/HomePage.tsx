@@ -55,7 +55,7 @@ export default function HomePage() {
                 <Link to={`/user/${a.user_id}`} className="text-decoration-none d-flex align-items-center mt-2">
                   <div style={{ width: 30, height: 30, overflow: "hidden", borderRadius: "50%", marginRight: 8 }}>
                     <img
-                      src={a.avatar_url ? `${API}${a.avatar_url}` : "https://via.placeholder.com/30x30"}
+                      src={a.avatar_url || "https://placehold.co/30x30"}
                       alt=""
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
