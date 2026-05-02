@@ -32,6 +32,15 @@ export default function UserProfilePage() {
   return (
     <div className="container mt-4">
       <Link to="/" className="btn btn-outline-secondary mb-3">← Назад</Link>
+      <div className="text-center mb-3">
+        <div style={{ width: 100, height: 100, overflow: "hidden", borderRadius: "50%", margin: "0 auto" }}>
+          <img
+            src={profile.avatar_url || "https://placehold.co/100x100"}
+            alt="avatar"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </div>
+      </div>
       <h1>{profile.username}</h1>
       <p>{profile.bio}</p>
       <h2 className="mt-3">Работы</h2>
