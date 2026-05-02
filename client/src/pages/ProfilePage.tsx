@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -31,6 +31,7 @@ export default function ProfilePage() {
 
   return (
     <div className="container mt-4" style={{ maxWidth: 500 }}>
+      <Link to="/" className="btn btn-outline-secondary mb-3">← Назад</Link>
       <h1>Профиль</h1>
       <div className="card p-3 mb-3">
         <div className="mb-3 text-center">
