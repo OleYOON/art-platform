@@ -55,7 +55,7 @@ async def create_artwork(
     await db.commit()
     await db.refresh(artwork)
 
-    tag_list = [t.strip() for t in tags.split(",") if t.strip()]
+    tag_list = [t.strip().lower() for t in tags.split(",") if t.strip()]
     for tag_name in tag_list:
         result_tag = await db.execute(select(Tag).where(Tag.name == tag_name))
         tag = result_tag.scalar()
@@ -74,6 +74,7 @@ async def get_artworks(tag: str | None = None, db: AsyncSession = Depends(get_db
     query = select(Artwork, User.username, User.avatar_url).join(User)
     
     if tag:
+        tag = tag.lower()
         query = query.join(artwork_tag).join(Tag).where(Tag.name == tag)
     
     result = await db.execute(query.order_by(Artwork.id.desc()))
