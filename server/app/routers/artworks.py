@@ -1,0 +1,105 @@
+import os
+import uuid
+from fastapi import APIRouter, Depends, UploadFile, File, Form
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from app.database import get_db
+from app.models.user import User
+from app.models.artwork import Artwork, Tag, artwork_tag
+from app.schemas.artwork import ArtworkOut
+from app.routers.auth import get_current_user
+
+router = APIRouter(prefix="/artworks", tags=["artworks"])
+UPLOAD_DIR = "uploads"
+
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+
+def build_artwork_out(a: Artwork, username: str, tags: list[str], avatar_url: str | None = None) -> ArtworkOut:
+    return ArtworkOut(
+        id=a.id,
+        title=a.title,
+        description=a.description,
+        image_url=a.image_url,
+        tags=tags,
+        user_id=a.user_id,
+        username=username,
+        avatar_url=avatar_url,
+    )
+
+
+@router.post("/", response_model=ArtworkOut)
+async def create_artwork(
+    title: str = Form(...),
+    description: str | None = Form(None),
+    tags: str = Form(""),
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    ext = file.filename.split(".")[-1] if file.filename else "png"
+    filename = f"{uuid.uuid4()}.{ext}"
+    filepath = os.path.join(UPLOAD_DIR, filename)
+
+    with open(filepath, "wb") as f:
+        f.write(await file.read())
+
+    artwork = Artwork(
+        title=title,
+        description=description,
+        image_url=f"/uploads/{filename}",
+        user_id=current_user.id,
+    )
+    db.add(artwork)
+    await db.commit()
+    await db.refresh(artwork)
+
+    tag_list = [t.strip() for t in tags.split(",") if t.strip()]
+    for tag_name in tag_list:
+        result = await db.execute(select(Tag).where(Tag.name == tag_name))
+        tag = result.scalar()
+        if not tag:
+            tag = Tag(name=tag_name)
+            db.add(tag)
+            await db.flush()
+        await db.execute(artwork_tag.insert().values(artwork_id=artwork.id, tag_id=tag.id))
+
+    await db.commit()
+    return build_artwork_out(artwork, current_user.username, tag_list, current_user.avatar_url)
+
+
+@router.get("/", response_model=list[ArtworkOut])
+async def get_artworks(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Artwork, User.username, User.avatar_url)
+        .join(User)
+        .order_by(Artwork.id.desc())
+    )
+    rows = result.all()
+    out = []
+    for a, username, avatar_url in rows:
+        tag_result = await db.execute(
+            select(Tag.name).join(artwork_tag).where(artwork_tag.c.artwork_id == a.id)
+        )
+        tags = [t for t in tag_result.scalars().all()]
+        out.append(build_artwork_out(a, username, tags, avatar_url))
+    return out
+
+
+@router.get("/user/{user_id}", response_model=list[ArtworkOut])
+async def get_user_artworks(user_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Artwork, User.username, User.avatar_url)
+        .join(User)
+        .where(Artwork.user_id == user_id)
+        .order_by(Artwork.id.desc())
+    )
+    rows = result.all()
+    out = []
+    for a, username, avatar_url in rows:
+        tag_result = await db.execute(
+            select(Tag.name).join(artwork_tag).where(artwork_tag.c.artwork_id == a.id)
+        )
+        tags = [t for t in tag_result.scalars().all()]
+        out.append(build_artwork_out(a, username, tags, avatar_url))
+    return out
