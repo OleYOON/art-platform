@@ -13,13 +13,6 @@ from app.routers.auth import get_current_user
 
 router = APIRouter(prefix="/artworks", tags=["artworks"])
 
-cloudinary.config(
-    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.environ.get("CLOUDINARY_API_KEY"),
-    api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
-)
-
-
 def build_artwork_out(a: Artwork, username: str, tags: list[str], avatar_url: str | None = None) -> ArtworkOut:
     return ArtworkOut(
         id=a.id,
@@ -42,6 +35,11 @@ async def create_artwork(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    cloudinary.config(
+        cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+        api_key=os.environ.get("CLOUDINARY_API_KEY"),
+        api_secret=os.environ.get("CLOUDINARY_API_SECRET"),   
+    )
     # Загрузка в Cloudinary
     contents = await file.read()
     result = cloudinary.uploader.upload(contents, folder="artworks")
