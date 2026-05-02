@@ -83,7 +83,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <img src={a.image_url} alt={a.title} style={{ width: "100%", maxHeight: 500, objectFit: "cover" }} />
+          <img src={a.image_url} alt={a.title} style={{ width: "100%" }} />
 
           <div className="p-2">
             <p className="mb-1"><strong>{a.username}</strong> {a.title}</p>
