@@ -38,7 +38,7 @@ export default function HomePage() {
   return (
     <div className="container" style={{ maxWidth: 600 }}>
       {/* Верхняя панель */}
-      <div className="d-flex justify-content-between align-items-center py-3 border-bottom mb-3">
+      <div className="d-flex justify-content-between align-items-center py-3 border-bottom mb-0 sticky-top bg-white">
         <h4 className="m-0">🐾 paws</h4>
         <div>
           {token ? (
@@ -66,11 +66,13 @@ export default function HomePage() {
 
       {/* Фильтр по тегу */}
       {filterTag && (
-        <div className="alert alert-info d-flex justify-content-between align-items-center py-2">
+        <div className="alert alert-info d-flex justify-content-between align-items-center py-2 mb-3 sticky-top" style={{ top: 56 }}>
           <span>#{filterTag}</span>
           <button className="btn-close" onClick={() => { setFilterTag(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}></button>
         </div>
       )}
+
+      <div className="mt-3" />
 
       {/* Лента */}
       {artworks.map((a) => (
