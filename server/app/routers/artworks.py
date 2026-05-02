@@ -2,7 +2,7 @@ import os
 import uuid
 import cloudinary
 import cloudinary.uploader
-from fastapi import APIRouter, Depends, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
@@ -104,3 +104,21 @@ async def get_user_artworks(user_id: int, db: AsyncSession = Depends(get_db)):
         tags = [t for t in tag_result.scalars().all()]
         out.append(build_artwork_out(a, username, tags, avatar_url))
     return out
+
+
+@router.delete("/{artwork_id}")
+async def delete_artwork(
+    artwork_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Artwork).where(Artwork.id == artwork_id))
+    artwork = result.scalar()
+    if not artwork:
+        raise HTTPException(status_code=404, detail="Работа не найдена")
+    if artwork.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Нельзя удалить чужую работу")
+    
+    await db.delete(artwork)
+    await db.commit()
+    return {"ok": True}

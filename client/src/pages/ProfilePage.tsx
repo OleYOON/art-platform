@@ -3,9 +3,17 @@ import { useNavigate, Link } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_URL;
 
+interface Artwork {
+  id: number;
+  title: string;
+  image_url: string;
+  tags: string[];
+}
+
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
   const [bio, setBio] = useState("");
+  const [artworks, setArtworks] = useState<Artwork[]>([]);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -14,7 +22,30 @@ export default function ProfilePage() {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (res.status === 401) { localStorage.removeItem("token"); navigate("/login"); return; }
-    if (res.ok) { const data = await res.json(); setUser(data); setBio(data.bio || ""); }
+    if (res.ok) {
+      const data = await res.json();
+      setUser(data);
+      setBio(data.bio || "");
+      fetchMyArtworks(data.id);
+    }
+  };
+
+  const fetchMyArtworks = async (userId: number) => {
+    const res = await fetch(`${API}/artworks/user/${userId}`);
+    if (res.ok) {
+      const data = await res.json();
+      setArtworks(data);
+    }
+  };
+
+  const handleDelete = async (artworkId: number) => {
+    const res = await fetch(`${API}/artworks/${artworkId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok && user) {
+      fetchMyArtworks(user.id);
+    }
   };
 
   useEffect(() => { fetchProfile(); }, []);
@@ -30,7 +61,7 @@ export default function ProfilePage() {
   if (!user) return <p className="text-center mt-5">Загрузка...</p>;
 
   return (
-    <div className="container mt-4" style={{ maxWidth: 500 }}>
+    <div className="container mt-4" style={{ maxWidth: 600 }}>
       <Link to="/" className="btn btn-outline-secondary mb-3">← Назад</Link>
       <h1>Профиль</h1>
       <div className="card p-3 mb-3">
@@ -81,6 +112,21 @@ export default function ProfilePage() {
       >
         Выйти
       </button>
+
+      <h2 className="mt-5">Мои работы</h2>
+      <div className="row">
+        {artworks.map((a) => (
+          <div key={a.id} className="col-6 mb-3">
+            <div className="card">
+              <img src={a.image_url} className="card-img-top" alt={a.title} />
+              <div className="card-body">
+                <p className="card-text">{a.title}</p>
+                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(a.id)}>Удалить</button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
