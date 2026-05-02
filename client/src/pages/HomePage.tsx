@@ -18,9 +18,13 @@ export default function HomePage() {
   const token = localStorage.getItem("token");
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [filterTag, setFilterTag] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
-  const fetchArtworks = (tag?: string | null) => {
-    const url = tag ? `${API}/artworks/?tag=${encodeURIComponent(tag)}` : `${API}/artworks/`;
+  const fetchArtworks = (tag?: string | null, searchTerm?: string) => {
+    const params = new URLSearchParams();
+    if (tag) params.set("tag", tag);
+    if (searchTerm) params.set("search", searchTerm);
+    const url = `${API}/artworks/${params.toString() ? "?" + params.toString() : ""}`;
     fetch(url)
       .then((r) => r.json())
       .then(setArtworks);
@@ -32,15 +36,27 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    fetchArtworks(filterTag);
-  }, [filterTag]);
+    fetchArtworks(filterTag, search);
+  }, [filterTag, search]);
 
   return (
     <div className="container" style={{ maxWidth: 600 }}>
       {/* Верхняя панель */}
       <div className="d-flex justify-content-between align-items-center py-3 border-bottom mb-0 sticky-top bg-white">
         <h4 className="m-0">🐾 paws</h4>
-        <div>
+        <div className="d-flex align-items-center">
+          <div className="input-group input-group-sm me-2" style={{ maxWidth: 150 }}>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Поиск..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {search && (
+              <button className="btn btn-outline-secondary" onClick={() => setSearch("")}>✕</button>
+            )}
+          </div>
           {token ? (
             <>
               <Link to="/upload" className="btn btn-outline-dark btn-sm me-2">+</Link>
@@ -114,7 +130,9 @@ export default function HomePage() {
       ))}
 
       {artworks.length === 0 && (
-        <p className="text-center text-muted mt-5">Нет работ{filterTag ? ` с тегом #${filterTag}` : ""}</p>
+        <p className="text-center text-muted mt-5">
+          Ничего не найдено
+        </p>
       )}
     </div>
   );

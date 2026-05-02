@@ -4,7 +4,7 @@ import cloudinary
 import cloudinary.uploader
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from app.database import get_db
 from app.models.user import User
 from app.models.artwork import Artwork, Tag, artwork_tag
@@ -40,7 +40,6 @@ async def create_artwork(
         api_key=os.environ.get("CLOUDINARY_API_KEY"),
         api_secret=os.environ.get("CLOUDINARY_API_SECRET"),   
     )
-    # Загрузка в Cloudinary
     contents = await file.read()
     result = cloudinary.uploader.upload(contents, folder="artworks")
     image_url = result["secure_url"]
@@ -70,12 +69,17 @@ async def create_artwork(
 
 
 @router.get("/", response_model=list[ArtworkOut])
-async def get_artworks(tag: str | None = None, db: AsyncSession = Depends(get_db)):
+async def get_artworks(tag: str | None = None, search: str | None = None, db: AsyncSession = Depends(get_db)):
     query = select(Artwork, User.username, User.avatar_url).join(User)
     
     if tag:
         tag = tag.lower()
         query = query.join(artwork_tag).join(Tag).where(Tag.name == tag)
+    
+    if search:
+        query = query.where(
+            or_(Artwork.title.ilike(f"%{search}%"), Artwork.description.ilike(f"%{search}%"))
+        )
     
     result = await db.execute(query.order_by(Artwork.id.desc()))
     rows = result.unique().all()
@@ -84,8 +88,8 @@ async def get_artworks(tag: str | None = None, db: AsyncSession = Depends(get_db
         tag_result = await db.execute(
             select(Tag.name).join(artwork_tag).where(artwork_tag.c.artwork_id == a.id)
         )
-        tags = [t for t in tag_result.scalars().all()]
-        out.append(build_artwork_out(a, username, tags, avatar_url))
+        tags_list = [t for t in tag_result.scalars().all()]
+        out.append(build_artwork_out(a, username, tags_list, avatar_url))
     return out
 
 
@@ -123,4 +127,4 @@ async def delete_artwork(
     
     await db.delete(artwork)
     await db.commit()
-    return {"ok": True}
+    return {"ok": true}
