@@ -70,13 +70,14 @@ async def create_artwork(
 
 
 @router.get("/", response_model=list[ArtworkOut])
-async def get_artworks(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(
-        select(Artwork, User.username, User.avatar_url)
-        .join(User)
-        .order_by(Artwork.id.desc())
-    )
-    rows = result.all()
+async def get_artworks(tag: str | None = None, db: AsyncSession = Depends(get_db)):
+    query = select(Artwork, User.username, User.avatar_url).join(User)
+    
+    if tag:
+        query = query.join(artwork_tag).join(Tag).where(Tag.name == tag)
+    
+    result = await db.execute(query.order_by(Artwork.id.desc()))
+    rows = result.unique().all()
     out = []
     for a, username, avatar_url in rows:
         tag_result = await db.execute(

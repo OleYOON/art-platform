@@ -17,12 +17,18 @@ interface Artwork {
 export default function HomePage() {
   const token = localStorage.getItem("token");
   const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const [filterTag, setFilterTag] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetch(`${API}/artworks/`)
+  const fetchArtworks = (tag?: string | null) => {
+    const url = tag ? `${API}/artworks/?tag=${encodeURIComponent(tag)}` : `${API}/artworks/`;
+    fetch(url)
       .then((r) => r.json())
       .then(setArtworks);
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchArtworks(filterTag);
+  }, [filterTag]);
 
   return (
     <div className="container" style={{ maxWidth: 600 }}>
@@ -53,10 +59,17 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Фильтр по тегу */}
+      {filterTag && (
+        <div className="alert alert-info d-flex justify-content-between align-items-center py-2">
+          <span>#{filterTag}</span>
+          <button className="btn-close" onClick={() => setFilterTag(null)}></button>
+        </div>
+      )}
+
       {/* Лента */}
       {artworks.map((a) => (
         <div key={a.id} className="mb-4 border rounded">
-          {/* Шапка поста */}
           <div className="d-flex align-items-center p-2">
             <Link to={`/user/${a.user_id}`} className="text-decoration-none d-flex align-items-center">
               <div style={{ width: 36, height: 36, overflow: "hidden", borderRadius: "50%", marginRight: 10 }}>
@@ -70,21 +83,32 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Изображение */}
           <img src={a.image_url} alt={a.title} style={{ width: "100%", maxHeight: 500, objectFit: "cover" }} />
 
-          {/* Подпись */}
           <div className="p-2">
             <p className="mb-1"><strong>{a.username}</strong> {a.title}</p>
             <p className="text-muted small mb-1">{a.description}</p>
             {a.tags.length > 0 && (
-              <p className="mb-0">{a.tags.map(t => (
-                <span key={t} className="text-primary me-2" style={{ fontSize: "0.85rem" }}>#{t}</span>
-              ))}</p>
+              <p className="mb-0">
+                {a.tags.map(t => (
+                  <span
+                    key={t}
+                    className="text-primary me-2"
+                    style={{ fontSize: "0.85rem", cursor: "pointer", textDecoration: "underline" }}
+                    onClick={() => setFilterTag(t)}
+                  >
+                    #{t}
+                  </span>
+                ))}
+              </p>
             )}
           </div>
         </div>
       ))}
+
+      {artworks.length === 0 && (
+        <p className="text-center text-muted mt-5">Нет работ{filterTag ? ` с тегом #${filterTag}` : ""}</p>
+      )}
     </div>
   );
 }
