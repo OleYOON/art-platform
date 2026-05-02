@@ -37,6 +37,9 @@ export default function UploadPage() {
         <input className="form-control mb-2" placeholder="Теги (через запятую)" value={tags} onChange={e => setTags(e.target.value)} />
         <input className="form-control mb-3" type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} required />
         <button className="btn btn-success w-100" type="submit">Загрузить</button>
+        <button className="btn btn-secondary w-100 mt-2" type="button" onClick={() => navigate("/")}>
+        Отмена
+        </button>
       </form>
     </div>
   );
