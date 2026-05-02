@@ -26,6 +26,11 @@ export default function HomePage() {
       .then(setArtworks);
   };
 
+  const handleTagClick = (tag: string) => {
+    setFilterTag(tag);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     fetchArtworks(filterTag);
   }, [filterTag]);
@@ -63,7 +68,7 @@ export default function HomePage() {
       {filterTag && (
         <div className="alert alert-info d-flex justify-content-between align-items-center py-2">
           <span>#{filterTag}</span>
-          <button className="btn-close" onClick={() => setFilterTag(null)}></button>
+          <button className="btn-close" onClick={() => { setFilterTag(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}></button>
         </div>
       )}
 
@@ -95,7 +100,7 @@ export default function HomePage() {
                     key={t}
                     className="text-primary me-2"
                     style={{ fontSize: "0.85rem", cursor: "pointer", textDecoration: "underline" }}
-                    onClick={() => setFilterTag(t)}
+                    onClick={() => handleTagClick(t)}
                   >
                     #{t}
                   </span>
