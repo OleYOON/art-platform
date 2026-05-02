@@ -68,7 +68,7 @@ export default function ProfilePage() {
         <div className="mb-3 text-center">
           <div style={{ width: 120, height: 120, overflow: "hidden", borderRadius: "50%", margin: "0 auto" }}>
             <img
-              src={user.avatar_url ? `${API}${user.avatar_url}` : "https://via.placeholder.com/120"}
+              src={user.avatar_url ? `${API}${user.avatar_url}` : "https://placehold.co/120x120"}
               alt="avatar"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />

@@ -94,14 +94,18 @@ async def upload_avatar(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    ext = file.filename.split(".")[-1] if file.filename else "png"
-    filename = f"avatar_{current_user.id}_{uuid.uuid4()}.{ext}"
-    filepath = os.path.join("uploads", filename)
-
-    with open(filepath, "wb") as f:
-        f.write(await file.read())
-
-    current_user.avatar_url = f"/uploads/{filename}"
+    import cloudinary
+    import cloudinary.uploader
+    
+    cloudinary.config(
+        cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+        api_key=os.environ.get("CLOUDINARY_API_KEY"),
+        api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+    )
+    
+    contents = await file.read()
+    result = cloudinary.uploader.upload(contents, folder="avatars")
+    current_user.avatar_url = result["secure_url"]
     await db.commit()
     await db.refresh(current_user)
     return current_user
