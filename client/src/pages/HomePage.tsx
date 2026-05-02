@@ -93,7 +93,7 @@ export default function HomePage() {
           <img src={a.image_url} alt={a.title} style={{ width: "100%" }} />
 
           <div className="p-2">
-            <p className="mb-1"><strong>{a.username}</strong> {a.title}</p>
+            <p className="mb-1"><strong>{a.title}</strong></p>
             <p className="text-muted small mb-1">{a.description}</p>
             {a.tags.length > 0 && (
               <p className="mb-0">
