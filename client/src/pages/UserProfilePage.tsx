@@ -39,7 +39,7 @@ export default function UserProfilePage() {
         {artworks.map((a) => (
           <div key={a.id} className="col-md-4 mb-3">
             <div className="card h-100">
-              <img src={`${API}${a.image_url}`} className="card-img-top" alt={a.title} />
+              <img src={a.image_url} className="card-img-top" alt={a.title} />
               <div className="card-body">
                 <h5>{a.title}</h5>
                 <p>{a.description}</p>
