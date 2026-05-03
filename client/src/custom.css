@@ -52,12 +52,13 @@ body {
 /* Комментарии */
 .comment-bar {
   background-color: #7c6fa0 !important;
+  border-top: none !important;
 }
 
 .comment-block {
   background-color: #7c6fa0 !important;
   color: #f0edf5 !important;
-  border-top: none !important;
+  border-top: 1px solid #2d2d44 !important;
 }
 
 .comment-block a {
