@@ -128,4 +128,4 @@ async def delete_artwork(
     
     await db.delete(artwork)
     await db.commit()
-    return {"ok": true}
+    return {"ok": True}
