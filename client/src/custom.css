@@ -176,3 +176,16 @@ h1 {
 .comment-block .form-control::placeholder {
   color: #b9adcc !important;
 }
+
+/* Формы логина/регистрации */
+.container.mt-5 h2,
+.container.mt-5 label,
+.container.mt-5 p,
+.container.mt-5 a {
+  color: #f0edf5 !important;
+}
+
+.container.mt-5 a {
+  color: #f0edf5 !important;
+  text-decoration: underline;
+}
