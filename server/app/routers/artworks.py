@@ -23,6 +23,7 @@ def build_artwork_out(a: Artwork, username: str, tags: list[str], avatar_url: st
         user_id=a.user_id,
         username=username,
         avatar_url=avatar_url,
+        created_at=a.created_at,
     )
 
 

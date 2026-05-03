@@ -22,6 +22,7 @@ interface Artwork {
   user_id: number;
   username: string;
   avatar_url: string | null;
+  created_at: string;
 }
 
 function formatDate(iso: string) {
@@ -285,6 +286,7 @@ export default function HomePage() {
             <p className="mb-1">
               <strong>{a.title}</strong>
             </p>
+            <p className="text-muted small mb-1">{formatDate(a.created_at)}</p>
             <p className="text-muted small mb-1">{a.description}</p>
             {a.tags.length > 0 && (
               <p className="mb-0">

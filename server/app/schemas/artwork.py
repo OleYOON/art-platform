@@ -16,3 +16,4 @@ class ArtworkOut(BaseModel):
     user_id: int
     username: str
     avatar_url: str | None = None
+    created_at: datetime
