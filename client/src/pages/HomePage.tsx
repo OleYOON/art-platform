@@ -28,6 +28,8 @@ export default function HomePage() {
   const [search, setSearch] = useState("");
   const [comments, setComments] = useState<Record<number, Comment[]>>({});
   const [newComment, setNewComment] = useState<Record<number, string>>({});
+  const [showComments, setShowComments] = useState<Record<number, boolean>>({});
+  const [replyTo, setReplyTo] = useState<Record<number, string | null>>({});
 
   const fetchArtworks = (tag?: string | null, searchTerm?: string) => {
     const params = new URLSearchParams();
@@ -60,7 +62,19 @@ export default function HomePage() {
       body: JSON.stringify({ body }),
     });
     setNewComment((prev) => ({ ...prev, [artworkId]: "" }));
+    setReplyTo((prev) => ({ ...prev, [artworkId]: null }));
     fetchComments(artworkId);
+  };
+
+  const handleReply = (artworkId: number, username: string) => {
+    setReplyTo((prev) => ({ ...prev, [artworkId]: username }));
+    setNewComment((prev) => ({ ...prev, [artworkId]: `@${username} ` }));
+    setShowComments((prev) => ({ ...prev, [artworkId]: true }));
+  };
+
+  const toggleComments = (artworkId: number) => {
+    setShowComments((prev) => ({ ...prev, [artworkId]: !prev[artworkId] }));
+    if (!comments[artworkId]) fetchComments(artworkId);
   };
 
   const handleTagClick = (tag: string) => {
@@ -157,29 +171,55 @@ export default function HomePage() {
             )}
           </div>
 
-          {/* Комментарии */}
-          <div className="border-top p-2">
-            {(comments[a.id] || []).map((c) => (
-              <div key={c.id} className="mb-1">
-                <strong>{c.username}</strong> {c.body}
-              </div>
-            ))}
-            {token && (
-              <div className="d-flex mt-2">
-                <input
-                  type="text"
-                  className="form-control form-control-sm"
-                  placeholder="Добавить комментарий..."
-                  value={newComment[a.id] || ""}
-                  onChange={(e) => setNewComment((prev) => ({ ...prev, [a.id]: e.target.value }))}
-                  onKeyDown={(e) => e.key === "Enter" && handleAddComment(a.id)}
-                />
-                <button className="btn btn-sm btn-outline-primary ms-1" onClick={() => handleAddComment(a.id)}>
-                  →
-                </button>
-              </div>
-            )}
+          {/* Кнопка комментариев */}
+          <div className="border-top px-2 py-1">
+            <button
+              className="btn btn-sm btn-link text-muted p-0"
+              onClick={() => toggleComments(a.id)}
+            >
+              💬 {(comments[a.id] || []).length || ""}
+            </button>
           </div>
+
+          {/* Комментарии (скрываемые) */}
+          {showComments[a.id] && (
+            <div className="border-top p-2">
+              {(comments[a.id] || []).map((c) => (
+                <div key={c.id} className="mb-1 small">
+                  <Link to={`/user/${c.username}`} className="text-dark fw-bold text-decoration-none">
+                    {c.username}
+                  </Link>{" "}
+                  {c.body}
+                  {token && (
+                    <button
+                      className="btn btn-link btn-sm p-0 ms-1 text-muted"
+                      onClick={() => handleReply(a.id, c.username)}
+                    >
+                      ответить
+                    </button>
+                  )}
+                </div>
+              ))}
+              {token && (
+                <div className="d-flex mt-2">
+                  <input
+                    type="text"
+                    className="form-control form-control-sm"
+                    placeholder={replyTo[a.id] ? `Ответ @${replyTo[a.id]}...` : "Добавить комментарий..."}
+                    value={newComment[a.id] || ""}
+                    onChange={(e) => setNewComment((prev) => ({ ...prev, [a.id]: e.target.value }))}
+                    onKeyDown={(e) => e.key === "Enter" && handleAddComment(a.id)}
+                  />
+                  <button
+                    className="btn btn-sm btn-outline-primary ms-1"
+                    onClick={() => handleAddComment(a.id)}
+                  >
+                    →
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
 
