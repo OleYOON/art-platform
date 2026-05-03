@@ -77,6 +77,7 @@ export default function HomePage() {
     setShowComments((prev) => ({ ...prev, [artworkId]: true }));
   };
 
+
   const toggleComments = (artworkId: number) => {
     setShowComments((prev) => ({ ...prev, [artworkId]: !prev[artworkId] }));
     if (!comments[artworkId]) fetchComments(artworkId);
@@ -89,10 +90,10 @@ export default function HomePage() {
 
   const renderComments = (commentList: Comment[], artworkId: number, depth: number = 0) => {
     return commentList.map((c) => (
-      <div key={c.id} style={{ marginLeft: Math.min(depth, 2) * 12 }} className="mb-1 small">
+      <div key={c.id} style={{ marginLeft: Math.min(depth, 1) * 16 }} className="mb-1 small">
         <Link to={`/user/${c.username}`} className="text-dark fw-bold text-decoration-none">{c.username}</Link>{" "}
         {c.body}
-        {token && depth < 3 && (
+        {token && (
           <button
             className="btn btn-link btn-sm p-0 ms-1 text-muted"
             onClick={() => handleReply(artworkId, c.username, c.id)}
@@ -100,7 +101,7 @@ export default function HomePage() {
             ответить
           </button>
         )}
-        {c.replies && c.replies.length > 0 && renderComments(c.replies, artworkId, depth + 1)}
+        {c.replies && c.replies.length > 0 && renderComments(c.replies, artworkId, Math.min(depth + 1, 1))}
       </div>
     ));
   };
