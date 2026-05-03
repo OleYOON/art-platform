@@ -18,6 +18,8 @@ body {
 .border.rounded .d-flex.align-items-center.p-2 {
   background-color: #7c6fa0;
   color: #f0edf5;
+  border-bottom: none !important;
+  
 }
 
 .border.rounded .d-flex.align-items-center.p-2 strong {
@@ -53,8 +55,7 @@ body {
 
 .comment-block {
   background-color: #7c6fa0 !important;
-  color: #f0edf5 !important;
-  border-top: none !important;
+  color: #f0edf5 !important;border-top: none !important;
 }
 .border-top.p-2.text-start a {
   color: #f0edf5 !important;
