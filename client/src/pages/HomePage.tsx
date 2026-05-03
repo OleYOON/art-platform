@@ -103,37 +103,40 @@ export default function HomePage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const renderComment = (c: Comment, artworkId: number) => (
-    <div key={c.id} className="mb-2 small">
-      <div className="d-flex justify-content-between align-items-start">
-        <div>
-          <Link to={`/user/${c.username}`} className="text-dark fw-bold text-decoration-none">{c.username}</Link>
-          <span className="text-muted ms-2">{formatDate(c.created_at)}</span>
+  const renderComment = (c: Comment, artworkId: number, rootParentId: number | null = null) => {
+    const replyTargetId = rootParentId ?? c.id;
+    return (
+      <div key={c.id} className="mb-2 small">
+        <div className="d-flex justify-content-between align-items-start">
+          <div>
+            <Link to={`/user/${c.username}`} className="text-dark fw-bold text-decoration-none">{c.username}</Link>
+            <span className="text-muted ms-2">{formatDate(c.created_at)}</span>
+          </div>
+          {currentUserId && String(currentUserId) === String(c.user_id) && (
+            <button className="btn btn-link btn-sm text-danger p-0" onClick={() => handleDeleteComment(artworkId, c.id)}>✕</button>
+          )}
         </div>
-        {currentUserId && String(currentUserId) === String(c.user_id) && (
-          <button className="btn btn-link btn-sm text-danger p-0" onClick={() => handleDeleteComment(artworkId, c.id)}>✕</button>
+        <div>{c.body}</div>
+        <div className="d-flex gap-2 mt-1">
+          {token && (
+            <button className="btn btn-link btn-sm p-0 text-muted" onClick={() => handleReply(artworkId, c.username, replyTargetId)}>
+              ответить
+            </button>
+          )}
+          {c.replies && c.replies.length > 0 && !c.parent_id && (
+            <button className="btn btn-link btn-sm p-0 text-muted" onClick={() => toggleReplies(c.id)}>
+              {showReplies[c.id] ? "скрыть ответы" : `ответы (${c.replies.length})`}
+            </button>
+          )}
+        </div>
+        {c.replies && c.replies.length > 0 && showReplies[c.id] && (
+          <div style={{ marginLeft: 16, borderLeft: "2px solid #eee", paddingLeft: 12 }} className="mt-1">
+            {c.replies.map(reply => renderComment(reply, artworkId, replyTargetId))}
+          </div>
         )}
       </div>
-      <div>{c.body}</div>
-      <div className="d-flex gap-2 mt-1">
-        {token && (
-          <button className="btn btn-link btn-sm p-0 text-muted" onClick={() => handleReply(artworkId, c.username, c.id)}>
-            ответить
-          </button>
-        )}
-        {c.replies && c.replies.length > 0 && !c.parent_id && (
-          <button className="btn btn-link btn-sm p-0 text-muted" onClick={() => toggleReplies(c.id)}>
-            {showReplies[c.id] ? "скрыть ответы" : `ответы (${c.replies.length})`}
-          </button>
-        )}
-      </div>
-      {c.replies && c.replies.length > 0 && showReplies[c.id] && (
-        <div style={{ marginLeft: 16, borderLeft: "2px solid #eee", paddingLeft: 12 }} className="mt-1">
-          {c.replies.map(reply => renderComment(reply, artworkId))}
-        </div>
-      )}
-    </div>
-  );
+    );
+  };
 
   useEffect(() => { fetchArtworks(filterTag, search); }, [filterTag, search]);
 
