@@ -189,3 +189,17 @@ h1 {
   color: #f0edf5 !important;
   text-decoration: underline;
 }
+
+/* Профиль — светлый текст */
+.form-label,
+.card.p-3 p,
+.card.p-3 strong,
+h2 {
+  color: #f0edf5 !important;
+}
+
+/* Рамка сверху поста в профиле */
+.card.border.rounded > img,
+.border.rounded > img {
+  border-top: 8px solid #7c6fa0;
+}
