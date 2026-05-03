@@ -26,16 +26,14 @@ interface Artwork {
 
 function formatDate(iso: string) {
   const d = new Date(iso);
-  return d.toLocaleDateString("ru-RU", {
+  return d.toLocaleString("ru-RU", {
     day: "numeric",
     month: "long",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    timeZone: "UTC",
   });
 }
-
 export default function HomePage() {
   const token = localStorage.getItem("token");
   const currentUserId = token ? JSON.parse(atob(token.split(".")[1])).sub : null;
