@@ -3,8 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
 from app.models.user import User
-from app.models.comment import Comment
-from app.schemas.comment import CommentCreate, CommentOut
+from app.models.comments import Comment
+from app.schemas.comments import CommentCreate, CommentOut
 from app.routers.auth import get_current_user
 
 router = APIRouter(prefix="/artworks", tags=["comments"])
