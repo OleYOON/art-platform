@@ -17,6 +17,6 @@ body {
 }
 
 .border.rounded img {
-  border-left: 4px solid #faf7f4;
-  border-right: 4px solid #faf7f4;
+  border-left: 20px solid #faf7f4;
+  border-right: 20px solid #faf7f4;
 }
