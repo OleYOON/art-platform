@@ -53,9 +53,9 @@ body {
 }
 
 /* Секция комментариев — сиреневая */
-.border-top.p-2.text-start {
-  background-color: #7c6fa0;
-  color: #f0edf5;
+div.border-top.p-2.text-start {
+  background-color: #7c6fa0 !important;
+  color: #f0edf5 !important;
 }
 
 .border-top.p-2.text-start a {
