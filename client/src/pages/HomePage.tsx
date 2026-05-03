@@ -137,6 +137,19 @@ export default function HomePage() {
 
   useEffect(() => { fetchArtworks(filterTag, search); }, [filterTag, search]);
 
+  if (!token) {
+    return (
+      <div className="container" style={{ maxWidth: 600 }}>
+        <div className="text-center mt-5 pt-5">
+          <h1>🐾 paws</h1>
+          <p className="text-muted">Войдите или зарегистрируйтесь, чтобы смотреть работы</p>
+          <Link to="/login" className="btn btn-primary me-2">Войти</Link>
+          <Link to="/signup" className="btn btn-outline-primary">Регистрация</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container" style={{ maxWidth: 600 }}>
       <div className="d-flex justify-content-between align-items-center py-3 border-bottom mb-0 sticky-top bg-white">
@@ -146,18 +159,9 @@ export default function HomePage() {
             <input type="text" className="form-control" placeholder="Поиск..." value={search} onChange={e => setSearch(e.target.value)} />
             {search && <button className="btn btn-outline-secondary" onClick={() => setSearch("")}>✕</button>}
           </div>
-          {token ? (
-            <>
-              <Link to="/upload" className="btn btn-outline-dark btn-sm me-2">+</Link>
-              <Link to="/profile" className="btn btn-outline-dark btn-sm me-2">👤</Link>
-              <button className="btn btn-outline-danger btn-sm" onClick={() => { localStorage.removeItem("token"); window.location.reload(); }}>Выйти</button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="btn btn-outline-primary btn-sm me-2">Войти</Link>
-              <Link to="/signup" className="btn btn-primary btn-sm">Регистрация</Link>
-            </>
-          )}
+          <Link to="/upload" className="btn btn-outline-dark btn-sm me-2">+</Link>
+          <Link to="/profile" className="btn btn-outline-dark btn-sm me-2">👤</Link>
+          <button className="btn btn-outline-danger btn-sm" onClick={() => { localStorage.removeItem("token"); window.location.href = "/login"; }}>Выйти</button>
         </div>
       </div>
 
@@ -204,19 +208,27 @@ export default function HomePage() {
           {showComments[a.id] && (
             <div className="border-top p-2 text-start">
               {(comments[a.id] || []).map(c => renderComment(c, a.id))}
-              {token && (
-                <div className="d-flex mt-2">
-                  <input
-                    type="text"
-                    className="form-control form-control-sm"
-                    placeholder={replyTo[a.id]?.username ? `Ответ ${replyTo[a.id]?.username}...` : "Добавить комментарий..."}
-                    value={newComment[a.id] || ""}
-                    onChange={e => setNewComment(prev => ({ ...prev, [a.id]: e.target.value }))}
-                    onKeyDown={e => e.key === "Enter" && handleAddComment(a.id, replyTo[a.id]?.parentId || null, replyTo[a.id]?.username || null)}
-                  />
-                  <button className="btn btn-sm btn-outline-primary ms-1" onClick={() => handleAddComment(a.id, replyTo[a.id]?.parentId || null, replyTo[a.id]?.username || null)}>→</button>
-                </div>
-              )}
+              <div className="d-flex mt-2">
+                <input
+                  type="text"
+                  className="form-control form-control-sm"
+                  placeholder={replyTo[a.id]?.username ? `Ответ ${replyTo[a.id]?.username}...` : "Добавить комментарий..."}
+                  value={newComment[a.id] || ""}
+                  onChange={e => setNewComment(prev => ({ ...prev, [a.id]: e.target.value }))}
+                  onKeyDown={e => {
+                    if (e.key === "Enter") {
+                      const parentId = replyTo[a.id]?.parentId ?? null;
+                      const username = replyTo[a.id]?.username ?? null;
+                      handleAddComment(a.id, parentId, username);
+                    }
+                  }}
+                />
+                <button className="btn btn-sm btn-outline-primary ms-1" onClick={() => {
+                  const parentId = replyTo[a.id]?.parentId ?? null;
+                  const username = replyTo[a.id]?.username ?? null;
+                  handleAddComment(a.id, parentId, username);
+                }}>→</button>
+              </div>
             </div>
           )}
         </div>
