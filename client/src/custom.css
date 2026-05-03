@@ -1,134 +1,117 @@
 body {
-  background-color: #262423;
+  background-color: #2584A7;
 }
 
 /* Пост */
 .border.rounded {
-  background-color: #402B47;
+  background-color: #FFF8E9;
   overflow: hidden;
   border: none !important;
 }
 
 .border.rounded > img {
-  border-left: 12px solid #8350C4;
-  border-right: 12px solid #8350C4;
+  border-left: 12px solid #24E5D2;
+  border-right: 12px solid #24E5D2;
 }
 
 /* Шапка поста */
 .border.rounded .d-flex.align-items-center.p-2 {
-  background-color: #8350C4;
-  color: #C9E0EB;
+  background-color: #24E5D2;
+  color: #2584A7;
 }
 
 .border.rounded .d-flex.align-items-center.p-2 strong {
-  color: #C9E0EB;
+  color: #2584A7;
 }
 
 .border.rounded .d-flex.align-items-center.p-2 .text-muted {
-  color: #C9E0EB !important;
+  color: #2584A7 !important;
   opacity: 0.7;
 }
 
 /* Блок с названием, описанием, тегами */
 .border.rounded .p-2 {
-  background-color: #8350C4;
-  color: #C9E0EB;
+  background-color: #24E5D2;
+  color: #2584A7;
 }
 
 .border.rounded .p-2 strong {
-  color: #C9E0EB;
+  color: #2584A7;
 }
 
 .border.rounded .p-2 .text-muted {
-  color: #C9E0EB !important;
+  color: #2584A7 !important;
   opacity: 0.8;
 }
 
 .border.rounded .p-2 .text-primary {
-  color: #C9E0EB !important;
+  color: #FE6D73 !important;
 }
 
-/* Нижняя панель */
-.border-top.px-2.py-1,
-div[class*="border-top"][class*="px-2"][class*="py-1"] {
-  background-color: #8350C4;
-  color: #C9E0EB;
+/* Нижняя панель — кнопки комментариев и корзины */
+.d-flex.justify-content-end.gap-3.border-top.px-2.py-1 {
+  background-color: #24E5D2;
+}
+
+/* Секция комментариев */
+.border-top.p-2.text-start {
+  background-color: #FFF8E9;
+  color: #2584A7;
+}
+
+.border-top.p-2.text-start a {
+  color: #2584A7 !important;
+}
+
+.border-top.p-2.text-start .text-muted {
+  color: #2584A7 !important;
+  opacity: 0.6;
 }
 
 /* Хедер сайта */
 .sticky-top {
-  background-color: #402B47 !important;
-  color: #C9E0EB;
-  border-bottom: 1px solid #8350C4 !important;
+  background-color: #FFF8E9 !important;
+  color: #2584A7;
+  border-bottom: 1px solid #FFCB77 !important;
   border-radius: 0 0 10px 10px;
 }
 
 .sticky-top h4 {
-  color: #C9E0EB;
+  color: #2584A7;
 }
 
 .sticky-top .btn-outline-dark {
-  color: #C9E0EB;
-  border-color: #8350C4;
+  color: #2584A7;
+  border-color: #FFCB77;
 }
 
 .sticky-top .btn-outline-dark:hover {
-  background-color: #7392B5;
+  background-color: #FFCB77;
 }
 
 .sticky-top .btn-outline-danger {
-  color: #C9E0EB;
-  border-color: #8350C4;
+  color: #FE6D73;
+  border-color: #FFCB77;
 }
 
 .sticky-top .form-control {
-  background-color: #262423;
-  border-color: #8350C4;
-  color: #C9E0EB;
+  background-color: #FFF8E9;
+  border-color: #24E5D2;
+  color: #2584A7;
 }
 
 .sticky-top .form-control::placeholder {
-  color: #7392B5;
+  color: #FFCB77;
 }
 
 .sticky-top .btn-outline-secondary {
-  color: #C9E0EB;
-  border-color: #8350C4;
+  color: #2584A7;
+  border-color: #24E5D2;
 }
 
 /* Фильтр по тегу */
 .alert-info {
-  background-color: #8350C4 !important;
-  border-color: #8350C4 !important;
-  color: #C9E0EB !important;
-}
-
-/* Профиль */
-.card.p-3 {
-  background-color: #8350C4;
-  color: #C9E0EB;
-}
-
-h1 {
-  color: #C9E0EB;
-}
-
-.btn-outline-secondary {
-  color: #C9E0EB;
-  border-color: #8350C4;
-}
-
-.btn-primary {
-  background-color: #7392B5;
-  border-color: #8350C4;
-}
-
-/* Комментарии */
-a.text-dark {
-  color: #C9E0EB !important;
-}
-
-.text-muted {
-  color: #C9E0EB !important;
-  opacity: 0.7;
+  background-color: #FFCB77 !important;
+  border-color: #FFCB77 !important;
+  color: #2584A7 !important;
 }
