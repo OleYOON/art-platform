@@ -1,7 +1,7 @@
 from sqlalchemy import String, Text, ForeignKey, Table, Column, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-from datetime import datetimeп
+from datetime import datetime
 
 artwork_tag = Table(
     "artwork_tags",
