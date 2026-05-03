@@ -4,7 +4,7 @@ from sqlalchemy import select
 from app.database import get_db
 from app.models.user import User
 from app.models.artwork import Artwork
-from app.models.comment import Comments
+from app.models.comments import Comment
 from app.schemas.comment import CommentCreate, CommentOut
 from app.routers.auth import get_current_user
 
