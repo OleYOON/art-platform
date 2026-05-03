@@ -52,14 +52,14 @@ body {
 /* Комментарии */
 .comment-bar {
   background-color: #7c6fa0 !important;
-  border-bottom: 1px solid #2d2d44 !important;
+  border-bottom: 3px solid #2d2d44 !important;
   border-top: none !important;
 }
 
 .comment-block {
   background-color: #7c6fa0 !important;
   color: #f0edf5 !important;
-  border-top: 1px solid #2d2d44 !important;
+  border-top: 3px solid #2d2d44 !important;
 }
 
 .comment-block a {
@@ -152,4 +152,12 @@ h1 {
   box-shadow: none !important;
   border-color: #7c6fa0 !important;
   background-color: #fff !important;
+}
+.btn:active, .btn:focus, .btn:hover {
+  background-color: inherit !important;
+  box-shadow: none !important;
+}
+
+.comment-block .btn:active, .comment-block .btn:focus {
+  background-color: transparent !important;
 }
