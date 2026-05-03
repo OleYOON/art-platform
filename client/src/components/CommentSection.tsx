@@ -62,7 +62,7 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
     if (sending) return;
     let body = newComment.trim();
     if (!body) return;
-    if (replyUsername && !body.startsWith(`${replyUsername} `)) body = `${replyUsername} ${body}`;
+    if (replyUsername && !body.startsWith(`${replyUsername}, `)) body = `${replyUsername}, ${body}`;
     setSending(true);
     setNewComment("");
     try {
