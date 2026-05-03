@@ -8,6 +8,8 @@ interface Comment {
   body: string;
   username: string;
   created_at: string;
+  parent_id: number | null;
+  replies?: Comment[];
 }
 
 interface Artwork {
@@ -30,6 +32,7 @@ export default function HomePage() {
   const [newComment, setNewComment] = useState<Record<number, string>>({});
   const [showComments, setShowComments] = useState<Record<number, boolean>>({});
   const [replyTo, setReplyTo] = useState<Record<number, string | null>>({});
+  const [replyParentId, setReplyParentId] = useState<Record<number, number | null>>({});
 
   const fetchArtworks = (tag?: string | null, searchTerm?: string) => {
     const params = new URLSearchParams();
@@ -50,7 +53,7 @@ export default function HomePage() {
       .then((data) => setComments((prev) => ({ ...prev, [artworkId]: data })));
   };
 
-  const handleAddComment = async (artworkId: number) => {
+  const handleAddComment = async (artworkId: number, parentId: number | null = null) => {
     const body = newComment[artworkId]?.trim();
     if (!body) return;
     await fetch(`${API}/artworks/${artworkId}/comments`, {
@@ -59,15 +62,17 @@ export default function HomePage() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ body }),
+      body: JSON.stringify({ body, parent_id: parentId }),
     });
     setNewComment((prev) => ({ ...prev, [artworkId]: "" }));
     setReplyTo((prev) => ({ ...prev, [artworkId]: null }));
+    setReplyParentId((prev) => ({ ...prev, [artworkId]: null }));
     fetchComments(artworkId);
   };
 
-  const handleReply = (artworkId: number, username: string) => {
+  const handleReply = (artworkId: number, username: string, commentId: number) => {
     setReplyTo((prev) => ({ ...prev, [artworkId]: username }));
+    setReplyParentId((prev) => ({ ...prev, [artworkId]: commentId }));
     setNewComment((prev) => ({ ...prev, [artworkId]: `@${username} ` }));
     setShowComments((prev) => ({ ...prev, [artworkId]: true }));
   };
@@ -80,6 +85,24 @@ export default function HomePage() {
   const handleTagClick = (tag: string) => {
     setFilterTag(tag);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const renderComments = (commentList: Comment[], artworkId: number, depth: number = 0) => {
+    return commentList.map((c) => (
+      <div key={c.id} style={{ marginLeft: depth * 20 }} className="mb-1 small border-start ps-2">
+        <Link to={`/user/${c.username}`} className="text-dark fw-bold text-decoration-none">{c.username}</Link>{" "}
+        {c.body}
+        {token && (
+          <button
+            className="btn btn-link btn-sm p-0 ms-1 text-muted"
+            onClick={() => handleReply(artworkId, c.username, c.id)}
+          >
+            ответить
+          </button>
+        )}
+        {c.replies && c.replies.length > 0 && renderComments(c.replies, artworkId, depth + 1)}
+      </div>
+    ));
   };
 
   useEffect(() => {
@@ -177,29 +200,14 @@ export default function HomePage() {
               className="btn btn-sm btn-link text-muted p-0"
               onClick={() => toggleComments(a.id)}
             >
-              💬 {(comments[a.id] || []).length || ""}
+              💬 {countAll((comments[a.id] || [])) || ""}
             </button>
           </div>
 
-          {/* Комментарии (скрываемые) */}
+          {/* Комментарии */}
           {showComments[a.id] && (
             <div className="border-top p-2">
-              {(comments[a.id] || []).map((c) => (
-                <div key={c.id} className="mb-1 small">
-                  <Link to={`/user/${c.username}`} className="text-dark fw-bold text-decoration-none">
-                    {c.username}
-                  </Link>{" "}
-                  {c.body}
-                  {token && (
-                    <button
-                      className="btn btn-link btn-sm p-0 ms-1 text-muted"
-                      onClick={() => handleReply(a.id, c.username)}
-                    >
-                      ответить
-                    </button>
-                  )}
-                </div>
-              ))}
+              {renderComments(comments[a.id] || [], a.id)}
               {token && (
                 <div className="d-flex mt-2">
                   <input
@@ -208,14 +216,9 @@ export default function HomePage() {
                     placeholder={replyTo[a.id] ? `Ответ @${replyTo[a.id]}...` : "Добавить комментарий..."}
                     value={newComment[a.id] || ""}
                     onChange={(e) => setNewComment((prev) => ({ ...prev, [a.id]: e.target.value }))}
-                    onKeyDown={(e) => e.key === "Enter" && handleAddComment(a.id)}
+                    onKeyDown={(e) => e.key === "Enter" && handleAddComment(a.id, replyParentId[a.id] || null)}
                   />
-                  <button
-                    className="btn btn-sm btn-outline-primary ms-1"
-                    onClick={() => handleAddComment(a.id)}
-                  >
-                    →
-                  </button>
+                  <button className="btn btn-sm btn-outline-primary ms-1" onClick={() => handleAddComment(a.id, replyParentId[a.id] || null)}>→</button>
                 </div>
               )}
             </div>
@@ -228,4 +231,13 @@ export default function HomePage() {
       )}
     </div>
   );
+}
+
+function countAll(comments: Comment[]): number {
+  let n = 0;
+  for (const c of comments) {
+    n += 1;
+    if (c.replies) n += countAll(c.replies);
+  }
+  return n;
 }
