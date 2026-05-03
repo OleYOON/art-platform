@@ -1,169 +1,134 @@
 body {
-  background-color: #52423D;
+  background-color: #262423;
 }
 
+/* Пост */
 .border.rounded {
-  background-color: #C0BAB3;
+  background-color: #402B47;
   overflow: hidden;
   border: none !important;
 }
 
 .border.rounded > img {
-  border-left: 12px solid #887D77;
-  border-right: 12px solid #887D77;
+  border-left: 12px solid #8350C4;
+  border-right: 12px solid #8350C4;
 }
 
 /* Шапка поста */
 .border.rounded .d-flex.align-items-center.p-2 {
-  background-color: #887D77;
-  color: #fff;
+  background-color: #8350C4;
+  color: #C9E0EB;
 }
 
 .border.rounded .d-flex.align-items-center.p-2 strong {
-  color: #fff;
+  color: #C9E0EB;
 }
 
 .border.rounded .d-flex.align-items-center.p-2 .text-muted {
-  color: #ddd !important;
+  color: #C9E0EB !important;
+  opacity: 0.7;
+}
+
+/* Блок с названием, описанием, тегами */
+.border.rounded .p-2 {
+  background-color: #8350C4;
+  color: #C9E0EB;
+}
+
+.border.rounded .p-2 strong {
+  color: #C9E0EB;
+}
+
+.border.rounded .p-2 .text-muted {
+  color: #C9E0EB !important;
+  opacity: 0.8;
+}
+
+.border.rounded .p-2 .text-primary {
+  color: #C9E0EB !important;
 }
 
 /* Нижняя панель */
 .border-top.px-2.py-1,
 div[class*="border-top"][class*="px-2"][class*="py-1"] {
-  background-color: #887D77;
-}
-
-/* Блок с названием, описанием, тегами */
-.border.rounded .p-2 {
-  background-color: #887D77;
-  color: #fff;
-}
-
-.border.rounded .p-2 strong {
-  color: #fff;
-}
-
-.border.rounded .p-2 .text-muted {
-  color: #ddd !important;
-}
-
-.border.rounded .p-2 .text-primary {
-  color: #f0e2d8 !important;
+  background-color: #8350C4;
+  color: #C9E0EB;
 }
 
 /* Хедер сайта */
 .sticky-top {
-  background-color: #391214 !important;
-  color: #fff;
-  border-bottom: 1px solid #52423D !important;
+  background-color: #402B47 !important;
+  color: #C9E0EB;
+  border-bottom: 1px solid #8350C4 !important;
   border-radius: 0 0 10px 10px;
-  padding-left: 15px;
-  padding-right: 15px;
 }
 
 .sticky-top h4 {
-  color: #fff;
+  color: #C9E0EB;
 }
 
 .sticky-top .btn-outline-dark {
-  color: #C0BAB3;
-  border-color: #887D77;
+  color: #C9E0EB;
+  border-color: #8350C4;
 }
 
 .sticky-top .btn-outline-dark:hover {
-  background-color: #887D77;
+  background-color: #7392B5;
 }
 
 .sticky-top .btn-outline-danger {
-  color: #C0BAB3;
-  border-color: #887D77;
+  color: #C9E0EB;
+  border-color: #8350C4;
 }
 
 .sticky-top .form-control {
-  background-color: #52423D;
-  border-color: #887D77;
-  color: #C0BAB3;
+  background-color: #262423;
+  border-color: #8350C4;
+  color: #C9E0EB;
 }
 
 .sticky-top .form-control::placeholder {
-  color: #887D77;
+  color: #7392B5;
 }
 
 .sticky-top .btn-outline-secondary {
-  color: #C0BAB3;
-  border-color: #887D77;
+  color: #C9E0EB;
+  border-color: #8350C4;
 }
 
-/* Профиль — карточка с именем, почтой, ролью */
+/* Фильтр по тегу */
+.alert-info {
+  background-color: #8350C4 !important;
+  border-color: #8350C4 !important;
+  color: #C9E0EB !important;
+}
+
+/* Профиль */
 .card.p-3 {
-  background-color: #887D77;
-  color: #fff;
+  background-color: #8350C4;
+  color: #C9E0EB;
 }
 
-.card.p-3 strong {
-  color: #fff;
-}
-
-/* Профиль — textarea "О себе" */
-.form-control {
-  background-color: #887D77;
-  border-color: #52423D;
-  color: #fff;
-}
-
-.form-control::placeholder {
-  color: #C0BAB3;
-}
-
-/* Рамка над изображением в профиле */
-.border.rounded > img {
-  border-top: 12px solid #887D77;
-}
-
-/* Профиль — текст */
-.card.p-3,
-.card.p-3 strong,
-.card.p-3 p {
-  color: #160f0c;
-}
-
-/* Заголовок "Профиль" */
 h1 {
-  color: #160f0c;
+  color: #C9E0EB;
 }
 
-/* Кнопка Назад */
 .btn-outline-secondary {
-  color: #160f0c;
-  border-color: #160f0c;
+  color: #C9E0EB;
+  border-color: #8350C4;
 }
 
-.btn-outline-secondary:hover {
-  background-color: #887D77;
-  color: #160f0c;
-}
-
-/* Кнопка Выбрать фото */
-.btn-outline-secondary.btn-sm {
-  color: #160f0c;
-  border-color: #160f0c;
-}
-
-/* Кнопка Выйти */
-.btn-outline-danger {
-  background-color: #887D77;
-  border-color: #160f0c;
-}
-
-/* Кнопка Сохранить */
 .btn-primary {
-  background-color: #887D77;
-  border-color: #160f0c;
+  background-color: #7392B5;
+  border-color: #8350C4;
 }
 
-/* Textarea О себе */
-.form-control {
-  background-color: #887D77;
-  border-color: #160f0c;
-  color: #160f0c;
+/* Комментарии */
+a.text-dark {
+  color: #C9E0EB !important;
+}
+
+.text-muted {
+  color: #C9E0EB !important;
+  opacity: 0.7;
 }
