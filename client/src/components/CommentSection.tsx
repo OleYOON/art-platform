@@ -138,7 +138,7 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
           style={{ textDecoration: "none" }}
           onClick={() => { setShowComments(!showComments); if (!showComments) fetchComments(); }}
         >
-          💬 {countAll(comments) || ""}
+          💬 {countAll(comments)}
         </button>
       </div>
       {showComments && (
