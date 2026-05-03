@@ -54,6 +54,7 @@ body {
 .comment-block {
   background-color: #7c6fa0 !important;
   color: #f0edf5 !important;
+  border-top: none !important;
 }
 .border-top.p-2.text-start a {
   color: #f0edf5 !important;

@@ -146,7 +146,7 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
         </button>
       </div>
       {showComments && (
-        <div className="comment-block border-top p-2 text-start">
+        <div className="comment-block p-2 text-start">
           {comments.map(c => renderComment(c))}
           {token && (
             <div className="d-flex mt-2">
