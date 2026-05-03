@@ -46,7 +46,7 @@ async def add_comment(
     await db.refresh(comment)
     return CommentOut(
         id=comment.id, body=comment.body, username=current_user.username,
-        created_at=comment.created_at, parent_id=comment.parent_id, replies=[]
+        created_at=comment.created_at, parent_id=comment.parent_id, replies=[],
         user_id=current_user.id
     )
 
