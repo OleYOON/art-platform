@@ -161,7 +161,7 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
                 />
                 <button
                 className="btn btn-sm position-absolute end-0 top-50 translate-middle-y border-0 p-1"
-                style={{ textDecoration: "none", boxShadow: "none", backgroundColor: "#1a1a2e", color: "#f0edf5" }}
+                style={{ textDecoration: "none", boxShadow: "none", backgroundColor: "#1a1a2e", color: "#b9adcc" }}
                 disabled={sending}
                 onClick={() => handleAddComment(replyTo?.parentId ?? null, replyTo?.username ?? null)}
                 >
