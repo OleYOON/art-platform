@@ -49,13 +49,14 @@ export default function ProfilePage() {
     if (res.ok) setArtworks(await res.json());
   };
 
-  const handleDelete = async (artworkId: number) => {
-    await fetch(`${API}/artworks/${artworkId}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (user) fetchMyArtworks(user.id);
-  };
+const handleDelete = async (artworkId: number) => {
+  if (!confirm("Вы уверены, что хотите удалить эту работу?")) return;
+  await fetch(`${API}/artworks/${artworkId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (user) fetchMyArtworks(user.id);
+};
 
   useEffect(() => { fetchProfile(); }, []);
 
