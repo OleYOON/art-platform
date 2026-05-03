@@ -56,6 +56,8 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
 
   useEffect(() => {
     fetchComments();
+    const interval = setInterval(fetchComments, 5000);
+    return () => clearInterval(interval);
   }, [artworkId]);
 
   const handleAddComment = async (parentId: number | null = null, replyUsername: string | null = null) => {

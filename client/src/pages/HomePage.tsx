@@ -47,7 +47,11 @@ export default function HomePage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  useEffect(() => { fetchArtworks(filterTag, search); }, [filterTag, search]);
+  useEffect(() => {
+    fetchArtworks(filterTag, search);
+    const interval = setInterval(() => fetchArtworks(filterTag, search), 10000);
+    return () => clearInterval(interval);
+  }, [filterTag, search]);
 
   if (!token) {
     return (
