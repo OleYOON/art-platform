@@ -90,7 +90,7 @@ export default function HomePage() {
 
   const renderComments = (commentList: Comment[], artworkId: number, depth: number = 0) => {
     return commentList.map((c) => (
-      <div key={c.id} style={{ marginLeft: Math.min(depth, 1) * 16 }} className="mb-1 small">
+      <div key={c.id} style={{ marginLeft: Math.min(depth, 1) * 16, textAlign: "left" }} className="mb-1 small">
         <Link to={`/user/${c.username}`} className="text-dark fw-bold text-decoration-none">{c.username}</Link>{" "}
         {c.body}
         {token && (
@@ -207,7 +207,7 @@ export default function HomePage() {
 
           {/* Комментарии */}
           {showComments[a.id] && (
-            <div className="border-top p-2">
+            <div className="border-top p-2 text-start">
               {renderComments(comments[a.id] || [], a.id)}
               {token && (
                 <div className="d-flex mt-2">
