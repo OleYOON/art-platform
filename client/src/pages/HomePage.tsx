@@ -3,6 +3,13 @@ import { Link } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_URL;
 
+interface Comment {
+  id: number;
+  body: string;
+  username: string;
+  created_at: string;
+}
+
 interface Artwork {
   id: number;
   title: string;
@@ -19,6 +26,8 @@ export default function HomePage() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [filterTag, setFilterTag] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [comments, setComments] = useState<Record<number, Comment[]>>({});
+  const [newComment, setNewComment] = useState<Record<number, string>>({});
 
   const fetchArtworks = (tag?: string | null, searchTerm?: string) => {
     const params = new URLSearchParams();
@@ -27,7 +36,31 @@ export default function HomePage() {
     const url = `${API}/artworks/${params.toString() ? "?" + params.toString() : ""}`;
     fetch(url)
       .then((r) => r.json())
-      .then(setArtworks);
+      .then((data) => {
+        setArtworks(data);
+        data.forEach((a: Artwork) => fetchComments(a.id));
+      });
+  };
+
+  const fetchComments = (artworkId: number) => {
+    fetch(`${API}/artworks/${artworkId}/comments`)
+      .then((r) => r.json())
+      .then((data) => setComments((prev) => ({ ...prev, [artworkId]: data })));
+  };
+
+  const handleAddComment = async (artworkId: number) => {
+    const body = newComment[artworkId]?.trim();
+    if (!body) return;
+    await fetch(`${API}/artworks/${artworkId}/comments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ body }),
+    });
+    setNewComment((prev) => ({ ...prev, [artworkId]: "" }));
+    fetchComments(artworkId);
   };
 
   const handleTagClick = (tag: string) => {
@@ -41,7 +74,6 @@ export default function HomePage() {
 
   return (
     <div className="container" style={{ maxWidth: 600 }}>
-      {/* Верхняя панель */}
       <div className="d-flex justify-content-between align-items-center py-3 border-bottom mb-0 sticky-top bg-white">
         <h4 className="m-0">🐾 paws</h4>
         <div className="d-flex align-items-center">
@@ -80,7 +112,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Фильтр по тегу */}
       {filterTag && (
         <div className="alert alert-info d-flex justify-content-between align-items-center py-2 mb-3 sticky-top" style={{ top: 56 }}>
           <span>#{filterTag}</span>
@@ -90,7 +121,6 @@ export default function HomePage() {
 
       <div className="mt-3" />
 
-      {/* Лента */}
       {artworks.map((a) => (
         <div key={a.id} className="mb-4 border rounded">
           <div className="d-flex align-items-center p-2">
@@ -126,13 +156,35 @@ export default function HomePage() {
               </p>
             )}
           </div>
+
+          {/* Комментарии */}
+          <div className="border-top p-2">
+            {(comments[a.id] || []).map((c) => (
+              <div key={c.id} className="mb-1">
+                <strong>{c.username}</strong> {c.body}
+              </div>
+            ))}
+            {token && (
+              <div className="d-flex mt-2">
+                <input
+                  type="text"
+                  className="form-control form-control-sm"
+                  placeholder="Добавить комментарий..."
+                  value={newComment[a.id] || ""}
+                  onChange={(e) => setNewComment((prev) => ({ ...prev, [a.id]: e.target.value }))}
+                  onKeyDown={(e) => e.key === "Enter" && handleAddComment(a.id)}
+                />
+                <button className="btn btn-sm btn-outline-primary ms-1" onClick={() => handleAddComment(a.id)}>
+                  →
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       ))}
 
       {artworks.length === 0 && (
-        <p className="text-center text-muted mt-5">
-          Ничего не найдено
-        </p>
+        <p className="text-center text-muted mt-5">Ничего не найдено</p>
       )}
     </div>
   );
