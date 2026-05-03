@@ -32,6 +32,7 @@ body {
 div[class*="border-top"][class*="px-2"][class*="py-1"] {
   background-color: #887D77;
 }
+
 /* Блок с названием, описанием, тегами */
 .border.rounded .p-2 {
   background-color: #887D77;
@@ -51,41 +52,41 @@ div[class*="border-top"][class*="px-2"][class*="py-1"] {
 }
 
 /* Хедер сайта */
-.sticky-top.bg-white {
+.sticky-top {
   background-color: #391214 !important;
   color: #fff;
   border-bottom: 1px solid #52423D !important;
 }
 
-.sticky-top.bg-white h4 {
+.sticky-top h4 {
   color: #fff;
 }
 
-.sticky-top.bg-white .btn-outline-dark {
+.sticky-top .btn-outline-dark {
   color: #C0BAB3;
   border-color: #887D77;
 }
 
-.sticky-top.bg-white .btn-outline-dark:hover {
+.sticky-top .btn-outline-dark:hover {
   background-color: #887D77;
 }
 
-.sticky-top.bg-white .btn-outline-danger {
+.sticky-top .btn-outline-danger {
   color: #C0BAB3;
   border-color: #887D77;
 }
 
-.sticky-top.bg-white .form-control {
+.sticky-top .form-control {
   background-color: #52423D;
   border-color: #887D77;
   color: #C0BAB3;
 }
 
-.sticky-top.bg-white .form-control::placeholder {
+.sticky-top .form-control::placeholder {
   color: #887D77;
 }
 
-.sticky-top.bg-white .btn-outline-secondary {
+.sticky-top .btn-outline-secondary {
   color: #C0BAB3;
   border-color: #887D77;
 }
