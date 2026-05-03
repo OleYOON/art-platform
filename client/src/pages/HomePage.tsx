@@ -73,7 +73,7 @@ export default function HomePage() {
   const handleReply = (artworkId: number, username: string, commentId: number) => {
     setReplyTo((prev) => ({ ...prev, [artworkId]: username }));
     setReplyParentId((prev) => ({ ...prev, [artworkId]: commentId }));
-    setNewComment((prev) => ({ ...prev, [artworkId]: `@${username} ` }));
+    setNewComment((prev) => ({ ...prev, [artworkId]: "" }));
     setShowComments((prev) => ({ ...prev, [artworkId]: true }));
   };
 
@@ -89,10 +89,10 @@ export default function HomePage() {
 
   const renderComments = (commentList: Comment[], artworkId: number, depth: number = 0) => {
     return commentList.map((c) => (
-      <div key={c.id} style={{ marginLeft: depth * 20 }} className="mb-1 small border-start ps-2">
+      <div key={c.id} style={{ marginLeft: Math.min(depth, 2) * 12 }} className="mb-1 small">
         <Link to={`/user/${c.username}`} className="text-dark fw-bold text-decoration-none">{c.username}</Link>{" "}
         {c.body}
-        {token && (
+        {token && depth < 3 && (
           <button
             className="btn btn-link btn-sm p-0 ms-1 text-muted"
             onClick={() => handleReply(artworkId, c.username, c.id)}
@@ -213,7 +213,7 @@ export default function HomePage() {
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    placeholder={replyTo[a.id] ? `Ответ @${replyTo[a.id]}...` : "Добавить комментарий..."}
+                    placeholder={replyTo[a.id] ? `Ответ ${replyTo[a.id]}...` : "Добавить комментарий..."}
                     value={newComment[a.id] || ""}
                     onChange={(e) => setNewComment((prev) => ({ ...prev, [a.id]: e.target.value }))}
                     onKeyDown={(e) => e.key === "Enter" && handleAddComment(a.id, replyParentId[a.id] || null)}
