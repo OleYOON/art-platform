@@ -64,7 +64,7 @@ export default function HomePage() {
 
   return (
     <div className="container" style={{ maxWidth: 600 }}>
-      <div className="d-flex justify-content-between align-items-center py-3 border-bottom mb-0 sticky-top bg-white">
+      <div className="d-flex justify-content-between align-items-center py-3 border-bottom mb-0 sticky-top">
         <h4 className="m-0">🐾 paws</h4>
         <div className="d-flex align-items-center">
           <div className="input-group input-group-sm me-2" style={{ maxWidth: 150 }}>
