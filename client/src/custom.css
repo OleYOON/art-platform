@@ -203,3 +203,12 @@ h2 {
 .border.rounded > img {
   border-top: 8px solid #7c6fa0;
 }
+
+.comment-block .form-control {
+  color: #f0edf5 !important;
+  background-color: #2d2d44 !important;
+}
+
+.comment-block .form-control::placeholder {
+  color: #b9adcc !important;
+}
