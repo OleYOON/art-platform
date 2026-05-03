@@ -49,7 +49,7 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchArtworks(filterTag, search);
-    const interval = setInterval(() => fetchArtworks(filterTag, search), 1000);
+    const interval = setInterval(() => fetchArtworks(filterTag, search), 10000);
     return () => clearInterval(interval);
   }, [filterTag, search]);
 
