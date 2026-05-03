@@ -119,3 +119,51 @@ div[class*="border-top"][class*="px-2"][class*="py-1"] {
 .border.rounded > img {
   border-top: 12px solid #887D77;
 }
+
+/* Профиль — текст */
+.card.p-3,
+.card.p-3 strong,
+.card.p-3 p {
+  color: #160f0c;
+}
+
+/* Заголовок "Профиль" */
+h1 {
+  color: #C0BAB3;
+}
+
+/* Кнопка Назад */
+.btn-outline-secondary {
+  color: #C0BAB3;
+  border-color: #887D77;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #887D77;
+  color: #160f0c;
+}
+
+/* Кнопка Выбрать фото */
+.btn-outline-secondary.btn-sm {
+  color: #160f0c;
+  border-color: #160f0c;
+}
+
+/* Кнопка Выйти */
+.btn-outline-danger {
+  color: #C0BAB3;
+  border-color: #887D77;
+}
+
+/* Кнопка Сохранить */
+.btn-primary {
+  background-color: #887D77;
+  border-color: #52423D;
+}
+
+/* Textarea О себе */
+.form-control {
+  background-color: #887D77;
+  border-color: #52423D;
+  color: #160f0c;
+}
