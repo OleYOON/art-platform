@@ -37,9 +37,10 @@ interface Props {
   artworkId: number;
   token: string | null;
   currentUserId: string | null;
+  onDeleteArtwork?: () => void;
 }
 
-export default function CommentSection({ artworkId, token, currentUserId }: Props) {
+export default function CommentSection({ artworkId, token, currentUserId, onDeleteArtwork }: Props) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [showComments, setShowComments] = useState(false);
   const [showReplies, setShowReplies] = useState<Record<number, boolean>>({});
@@ -122,8 +123,21 @@ export default function CommentSection({ artworkId, token, currentUserId }: Prop
 
   return (
     <>
-      <div className="border-top px-2 py-1">
-        <button className="btn btn-sm btn-link text-muted p-0" onClick={() => { setShowComments(!showComments); if (!showComments) fetchComments(); }}>
+      <div className="d-flex justify-content-end gap-3 border-top px-2 py-1">
+        {currentUserId && onDeleteArtwork && (
+          <button
+            className="btn btn-sm text-danger p-0 border-0 bg-transparent"
+            style={{ textDecoration: "none" }}
+            onClick={onDeleteArtwork}
+          >
+            🗑
+          </button>
+        )}
+        <button
+          className="btn btn-sm text-muted p-0 border-0 bg-transparent"
+          style={{ textDecoration: "none" }}
+          onClick={() => { setShowComments(!showComments); if (!showComments) fetchComments(); }}
+        >
           💬 {countAll(comments) || ""}
         </button>
       </div>

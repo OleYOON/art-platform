@@ -121,13 +121,12 @@ export default function HomePage() {
             )}
           </div>
 
-          <div className="d-flex justify-content-end gap-2 border-top px-2 py-1">
-            {currentUserId && String(currentUserId) === String(a.user_id) && (
-              <button className="btn btn-sm btn-link text-danger p-0" onClick={() => handleDeleteArtwork(a.id)}>🗑</button>
-            )}
-          </div>
-
-          <CommentSection artworkId={a.id} token={token} currentUserId={currentUserId} />
+          <CommentSection
+            artworkId={a.id}
+            token={token}
+            currentUserId={currentUserId}
+            onDeleteArtwork={currentUserId && String(currentUserId) === String(a.user_id) ? () => handleDeleteArtwork(a.id) : undefined}
+          />
         </div>
       ))}
 

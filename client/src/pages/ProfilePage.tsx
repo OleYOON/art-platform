@@ -109,9 +109,13 @@ export default function ProfilePage() {
             <p className="mb-1"><strong>{a.title}</strong></p>
             <p className="text-muted small mb-1">{formatDate(a.created_at)}</p>
             {a.tags.map(t => <span key={t} className="badge bg-secondary me-1">{t}</span>)}
-            <button className="btn btn-danger btn-sm mt-2" onClick={() => handleDelete(a.id)}>Удалить</button>
           </div>
-          <CommentSection artworkId={a.id} token={token} currentUserId={currentUserId} />
+          <CommentSection
+            artworkId={a.id}
+            token={token}
+            currentUserId={currentUserId}
+            onDeleteArtwork={() => handleDelete(a.id)}
+          />
         </div>
       ))}
     </div>
