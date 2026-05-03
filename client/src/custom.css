@@ -52,7 +52,7 @@ body {
 /* Комментарии */
 .comment-bar {
   background-color: #7c6fa0 !important;
-  border-top: 1px solid #2d2d44 !important;
+  border-bottom: 1px solid #2d2d44 !important;
 }
 
 .comment-block {
