@@ -1,7 +1,7 @@
-from sqlalchemy import String, Text, ForeignKey, Table, Column
+from sqlalchemy import String, Text, ForeignKey, Table, Column, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-from datetime import datetime
+from datetime import datetimeп
 
 artwork_tag = Table(
     "artwork_tags",
@@ -20,7 +20,7 @@ class Artwork(Base):
     description: Mapped[str | None] = mapped_column(Text, default=None)
     image_url: Mapped[str] = mapped_column(String(500))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    
+
     owner = relationship("User", backref="artworks")
 
 
