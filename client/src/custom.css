@@ -151,7 +151,6 @@ h1 {
 .form-control:focus {
   box-shadow: none !important;
   border-color: #7c6fa0 !important;
-  background-color: #fff !important;
 }
 .btn:active, .btn:focus, .btn:hover {
   background-color: inherit !important;
