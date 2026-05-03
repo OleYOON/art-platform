@@ -150,17 +150,24 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
           {comments.map(c => renderComment(c))}
           {token && (
             <div className="d-flex mt-2">
-              <input
+            <div className="position-relative flex-grow-1">
+                <input
                 type="text"
-                className="form-control form-control-sm"
+                className="form-control form-control-sm pe-5"
                 placeholder={replyTo ? `Ответ ${replyTo.username}...` : "Добавить комментарий..."}
                 value={newComment}
                 onChange={e => setNewComment(e.target.value)}
                 onKeyDown={e => { if (e.key === "Enter") handleAddComment(replyTo?.parentId ?? null, replyTo?.username ?? null); }}
-              />
-              <button className="btn btn-sm btn-outline-primary ms-1" disabled={sending} onClick={() => handleAddComment(replyTo?.parentId ?? null, replyTo?.username ?? null)}>
+                />
+                <button
+                className="btn btn-sm position-absolute end-0 top-50 translate-middle-y border-0 bg-white p-1"
+                style={{ textDecoration: "none", boxShadow: "none" }}
+                disabled={sending}
+                onClick={() => handleAddComment(replyTo?.parentId ?? null, replyTo?.username ?? null)}
+                >
                 {sending ? "..." : "→"}
-              </button>
+                </button>
+            </div>
             </div>
           )}
         </div>

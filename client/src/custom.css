@@ -147,3 +147,9 @@ h1 {
   border-color: #7c6fa0;
   color: #f0edf5;
 }
+
+.form-control:focus {
+  box-shadow: none !important;
+  border-color: #7c6fa0 !important;
+  background-color: #fff !important;
+}
