@@ -160,8 +160,8 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
                 onKeyDown={e => { if (e.key === "Enter") handleAddComment(replyTo?.parentId ?? null, replyTo?.username ?? null); }}
                 />
                 <button
-                className="btn btn-sm position-absolute end-0 top-50 translate-middle-y border-0 bg-white p-1"
-                style={{ textDecoration: "none", boxShadow: "none" }}
+                className="btn btn-sm position-absolute end-0 top-50 translate-middle-y border-0 p-1"
+                style={{ textDecoration: "none", boxShadow: "none", backgroundColor: "#1a1a2e", color: "#f0edf5" }}
                 disabled={sending}
                 onClick={() => handleAddComment(replyTo?.parentId ?? null, replyTo?.username ?? null)}
                 >
