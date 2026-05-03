@@ -129,13 +129,13 @@ div[class*="border-top"][class*="px-2"][class*="py-1"] {
 
 /* Заголовок "Профиль" */
 h1 {
-  color: #C0BAB3;
+  color: #160f0c;
 }
 
 /* Кнопка Назад */
 .btn-outline-secondary {
-  color: #C0BAB3;
-  border-color: #887D77;
+  color: #160f0c;
+  border-color: #160f0c;
 }
 
 .btn-outline-secondary:hover {
@@ -151,19 +151,19 @@ h1 {
 
 /* Кнопка Выйти */
 .btn-outline-danger {
-  color: #C0BAB3;
-  border-color: #887D77;
+  background-color: #887D77;
+  border-color: #160f0c;
 }
 
 /* Кнопка Сохранить */
 .btn-primary {
   background-color: #887D77;
-  border-color: #52423D;
+  border-color: #160f0c;
 }
 
 /* Textarea О себе */
 .form-control {
   background-color: #887D77;
-  border-color: #52423D;
+  border-color: #160f0c;
   color: #160f0c;
 }
