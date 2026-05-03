@@ -79,7 +79,7 @@ body {
 
 .sticky-top h4 {
   color: #f0edf5;
-  margin-right: 20px;
+  margin-right: 30px;
 }
 
 .sticky-top .btn-outline-dark {
@@ -116,6 +116,8 @@ body {
   background-color: #7c6fa0 !important;
   border-color: #7c6fa0 !important;
   color: #f0edf5 !important;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 0 !important;
 }
 
 /* Профиль */
