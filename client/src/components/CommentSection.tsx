@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_URL;
@@ -53,6 +53,10 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
       .then(r => r.json())
       .then(data => setComments(data));
   };
+
+  useEffect(() => {
+    fetchComments();
+  }, [artworkId]);
 
   const handleAddComment = async (parentId: number | null = null, replyUsername: string | null = null) => {
     if (sending) return;
