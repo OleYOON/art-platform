@@ -209,7 +209,7 @@ export default function HomePage() {
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    placeholder={replyTo[a.id] ? `Ответ ${replyTo[a.id].username}...` : "Добавить комментарий..."}
+                    placeholder={replyTo[a.id]?.username ? `Ответ ${replyTo[a.id]?.username}...` : "Добавить комментарий..."}
                     value={newComment[a.id] || ""}
                     onChange={e => setNewComment(prev => ({ ...prev, [a.id]: e.target.value }))}
                     onKeyDown={e => e.key === "Enter" && handleAddComment(a.id, replyTo[a.id]?.parentId || null, replyTo[a.id]?.username || null)}
