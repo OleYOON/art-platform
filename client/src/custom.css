@@ -8,7 +8,7 @@ body {
   border: none !important;
 }
 
-.border.rounded img {
+.border.rounded > img {
   border-left: 12px solid #887D77;
   border-right: 12px solid #887D77;
 }

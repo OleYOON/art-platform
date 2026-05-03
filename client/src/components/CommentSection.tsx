@@ -123,7 +123,7 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
 
   return (
     <>
-      <div className="d-flex justify-content-end gap-3 border-top px-2 py-1" style={{ backgroundColor: "#faf7f4" }}>
+      <div className="d-flex justify-content-end gap-3 border-top px-2 py-1" style={{ backgroundColor: "#887D77" }}>
         {currentUserId && onDeleteArtwork && (
           <button
             className="btn btn-sm text-danger p-0 border-0 bg-transparent"
