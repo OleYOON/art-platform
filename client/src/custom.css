@@ -11,3 +11,12 @@ body {
   background-color: #faf7f4;
   border-bottom: 1px solid #eee;
 }
+
+.border.rounded {
+  overflow: hidden;
+}
+
+.border.rounded img {
+  border-left: 4px solid #faf7f4;
+  border-right: 4px solid #faf7f4;
+}
