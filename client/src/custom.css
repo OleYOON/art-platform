@@ -47,17 +47,14 @@ body {
   color: #f0edf5 !important;
 }
 
-/* Нижняя панель — кнопки комментариев и корзины */
-.d-flex.justify-content-end.gap-3.border-top.px-2.py-1 {
-  background-color: #7c6fa0;
+.comment-bar {
+  background-color: #7c6fa0 !important;
 }
 
-/* Секция комментариев — сиреневая */
-div.border-top.p-2.text-start {
+.comment-block {
   background-color: #7c6fa0 !important;
   color: #f0edf5 !important;
 }
-
 .border-top.p-2.text-start a {
   color: #f0edf5 !important;
 }

@@ -113,7 +113,7 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
           )}
         </div>
         {c.replies && c.replies.length > 0 && showReplies[c.id] && (
-          <div style={{ marginLeft: 16, borderLeft: "2px solid #eee", paddingLeft: 12 }} className="mt-1">
+          <div style={{ marginLeft: 16, borderLeft: "2px solid #f0edf5", paddingLeft: 12 }} className="mt-1">
             {c.replies.map(reply => renderComment(reply, replyTargetId))}
           </div>
         )}
@@ -123,7 +123,7 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
 
   return (
     <>
-      <div className="d-flex justify-content-end gap-3 border-top px-2 py-1" style={{ backgroundColor: "#887D77" }}>
+      <div className="comment-bar d-flex justify-content-end gap-3 border-top px-2 py-1">
         {currentUserId && onDeleteArtwork && (
           <button
             className="btn btn-sm text-danger p-0 border-0 bg-transparent"
@@ -142,7 +142,7 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
         </button>
       </div>
       {showComments && (
-        <div className="border-top p-2 text-start">
+        <div className="comment-block border-top p-2 text-start">
           {comments.map(c => renderComment(c))}
           {token && (
             <div className="d-flex mt-2">
