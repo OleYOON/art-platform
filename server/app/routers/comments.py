@@ -18,7 +18,7 @@ def build_comment_tree(comments_data):
         c.username = username
         comment_map[c.id] = CommentOut(
             id=c.id, body=c.body, username=username, created_at=c.created_at,
-            parent_id=c.parent_id, replies=[]
+            parent_id=c.parent_id, replies=[], user_id=c.user_id
         )
     for obj in comment_map.values():
         if obj.parent_id and obj.parent_id in comment_map:
@@ -47,6 +47,7 @@ async def add_comment(
     return CommentOut(
         id=comment.id, body=comment.body, username=current_user.username,
         created_at=comment.created_at, parent_id=comment.parent_id, replies=[]
+        user_id=current_user.id
     )
 
 
