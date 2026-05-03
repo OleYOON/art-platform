@@ -5,6 +5,7 @@ body {
 .border.rounded {
   background-color: #C0BAB3;
   overflow: hidden;
+  border: none !important;
 }
 
 .border.rounded img {
@@ -18,12 +19,10 @@ body {
   color: #fff;
 }
 
-/* Шапка поста — имя */
 .border.rounded .d-flex.align-items-center.p-2 strong {
   color: #fff;
 }
 
-/* Шапка поста — дата */
 .border.rounded .d-flex.align-items-center.p-2 .text-muted {
   color: #ddd !important;
 }
@@ -32,24 +31,11 @@ body {
 .border-top.px-2.py-1,
 div[class*="border-top"][class*="px-2"][class*="py-1"] {
   background-color: #887D77;
-  color: #fff;
 }
 
-/* Кнопки в нижней панели */
-div[class*="border-top"] button {
-  color: #fff !important;
-}
-
-/* Хедер сайта */
+/* Хедер сайта — светлый */
 .sticky-top.bg-white {
-  background-color: #52423D !important;
-  color: #fff;
-  border-color: #887D77 !important;
-}
-
-/* Фильтр по тегу */
-.alert-info {
-  background-color: #887D77 !important;
-  border-color: #887D77 !important;
-  color: #fff !important;
+  background-color: #fff !important;
+  color: #000;
+  border-color: #e8e3dd !important;
 }
