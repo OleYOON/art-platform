@@ -57,6 +57,8 @@ div[class*="border-top"][class*="px-2"][class*="py-1"] {
   color: #fff;
   border-bottom: 1px solid #52423D !important;
   border-radius: 0 0 10px 10px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .sticky-top h4 {
@@ -90,4 +92,30 @@ div[class*="border-top"][class*="px-2"][class*="py-1"] {
 .sticky-top .btn-outline-secondary {
   color: #C0BAB3;
   border-color: #887D77;
+}
+
+/* Профиль — карточка с именем, почтой, ролью */
+.card.p-3 {
+  background-color: #887D77;
+  color: #fff;
+}
+
+.card.p-3 strong {
+  color: #fff;
+}
+
+/* Профиль — textarea "О себе" */
+.form-control {
+  background-color: #887D77;
+  border-color: #52423D;
+  color: #fff;
+}
+
+.form-control::placeholder {
+  color: #C0BAB3;
+}
+
+/* Рамка над изображением в профиле */
+.border.rounded > img {
+  border-top: 12px solid #887D77;
 }
