@@ -42,15 +42,6 @@ export default function HomePage() {
     fetch(url).then(r => r.json()).then(data => setArtworks(data));
   };
 
-  const handleDeleteArtwork = async (artworkId: number) => {
-    if (!confirm("Удалить работу?")) return;
-    await fetch(`${API}/artworks/${artworkId}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    fetchArtworks(filterTag, search);
-  };
-
   const handleTagClick = (tag: string) => {
     setFilterTag(tag);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -125,7 +116,6 @@ export default function HomePage() {
             artworkId={a.id}
             token={token}
             currentUserId={currentUserId}
-            onDeleteArtwork={currentUserId && String(currentUserId) === String(a.user_id) ? () => handleDeleteArtwork(a.id) : undefined}
           />
         </div>
       ))}
