@@ -39,3 +39,21 @@ div[class*="border-top"][class*="px-2"][class*="py-1"] {
   color: #000;
   border-color: #e8e3dd !important;
 }
+
+/* Блок с названием, описанием, тегами */
+.border.rounded .p-2 {
+  background-color: #887D77;
+  color: #fff;
+}
+
+.border.rounded .p-2 strong {
+  color: #fff;
+}
+
+.border.rounded .p-2 .text-muted {
+  color: #ddd !important;
+}
+
+.border.rounded .p-2 .text-primary {
+  color: #f0e2d8 !important;
+}
