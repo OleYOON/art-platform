@@ -161,3 +161,9 @@ h1 {
 .comment-block .btn:active, .comment-block .btn:focus {
   background-color: transparent !important;
 }
+
+.comment-block .btn.position-absolute:active,
+.comment-block .btn.position-absolute:hover {
+  background-color: #1a1a2e !important;
+  color: #f0edf5 !important;
+}
