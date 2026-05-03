@@ -172,3 +172,7 @@ h1 {
   border-color: #7c6fa0 !important;
   box-shadow: none !important;
 }
+
+.comment-block .form-control::placeholder {
+  color: #b9adcc !important;
+}
