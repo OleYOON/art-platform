@@ -25,7 +25,7 @@ interface Artwork {
 }
 
 function formatDate(iso: string) {
-  const d = new Date(iso);
+  const d = new Date(iso + "Z");
   return d.toLocaleString("ru-RU", {
     day: "numeric",
     month: "long",
