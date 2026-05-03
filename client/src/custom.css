@@ -1,22 +1,55 @@
 body {
-  background-color: #f5f0eb;
-}
-
-.card, .border.rounded {
-  background-color: #fff;
-  border: 1px solid #e8e3dd !important;
-}
-
-.border.rounded .d-flex.align-items-center.p-2 {
-  background-color: #faf7f4;
-  border-bottom: 1px solid #eee;
+  background-color: #52423D;
 }
 
 .border.rounded {
+  background-color: #C0BAB3;
   overflow: hidden;
 }
 
 .border.rounded img {
-  border-left: 20px solid #faf7f4;
-  border-right: 20px solid #faf7f4;
+  border-left: 12px solid #887D77;
+  border-right: 12px solid #887D77;
+}
+
+/* Шапка поста */
+.border.rounded .d-flex.align-items-center.p-2 {
+  background-color: #887D77;
+  color: #fff;
+}
+
+/* Шапка поста — имя */
+.border.rounded .d-flex.align-items-center.p-2 strong {
+  color: #fff;
+}
+
+/* Шапка поста — дата */
+.border.rounded .d-flex.align-items-center.p-2 .text-muted {
+  color: #ddd !important;
+}
+
+/* Нижняя панель */
+.border-top.px-2.py-1,
+div[class*="border-top"][class*="px-2"][class*="py-1"] {
+  background-color: #887D77;
+  color: #fff;
+}
+
+/* Кнопки в нижней панели */
+div[class*="border-top"] button {
+  color: #fff !important;
+}
+
+/* Хедер сайта */
+.sticky-top.bg-white {
+  background-color: #52423D !important;
+  color: #fff;
+  border-color: #887D77 !important;
+}
+
+/* Фильтр по тегу */
+.alert-info {
+  background-color: #887D77 !important;
+  border-color: #887D77 !important;
+  color: #fff !important;
 }
