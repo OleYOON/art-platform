@@ -6,3 +6,8 @@ body {
   background-color: #fff;
   border: 1px solid #e8e3dd !important;
 }
+
+.border.rounded .d-flex.align-items-center.p-2 {
+  background-color: #faf7f4;
+  border-bottom: 1px solid #eee;
+}
