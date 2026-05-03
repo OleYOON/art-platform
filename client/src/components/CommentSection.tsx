@@ -1,0 +1,152 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+const API = import.meta.env.VITE_API_URL;
+
+export interface Comment {
+  id: number;
+  body: string;
+  username: string;
+  created_at: string;
+  parent_id: number | null;
+  user_id: number;
+  replies?: Comment[];
+}
+
+function formatDate(iso: string) {
+  const d = new Date(iso + "Z");
+  return d.toLocaleString("ru-RU", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export function countAll(comments: Comment[]): number {
+  let n = 0;
+  for (const c of comments) {
+    n += 1;
+    if (c.replies) n += countAll(c.replies);
+  }
+  return n;
+}
+
+interface Props {
+  artworkId: number;
+  token: string | null;
+  currentUserId: string | null;
+}
+
+export default function CommentSection({ artworkId, token, currentUserId }: Props) {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [showComments, setShowComments] = useState(false);
+  const [showReplies, setShowReplies] = useState<Record<number, boolean>>({});
+  const [replyTo, setReplyTo] = useState<{ username: string; parentId: number } | null>(null);
+  const [newComment, setNewComment] = useState("");
+  const [sending, setSending] = useState(false);
+
+  const fetchComments = () => {
+    fetch(`${API}/artworks/${artworkId}/comments`)
+      .then(r => r.json())
+      .then(data => setComments(data));
+  };
+
+  const handleAddComment = async (parentId: number | null = null, replyUsername: string | null = null) => {
+    if (sending) return;
+    let body = newComment.trim();
+    if (!body) return;
+    if (replyUsername && !body.startsWith(`${replyUsername} `)) body = `${replyUsername} ${body}`;
+    setSending(true);
+    setNewComment("");
+    try {
+      await fetch(`${API}/artworks/${artworkId}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ body, parent_id: parentId }),
+      });
+      setReplyTo(null);
+      fetchComments();
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    await fetch(`${API}/artworks/${artworkId}/comments/${commentId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    fetchComments();
+  };
+
+  const handleReply = (username: string, parentId: number) => {
+    setReplyTo({ username, parentId });
+    setNewComment("");
+    setShowReplies(prev => ({ ...prev, [parentId]: true }));
+  };
+
+  const toggleReplies = (commentId: number) => setShowReplies(prev => ({ ...prev, [commentId]: !prev[commentId] }));
+
+  const renderComment = (c: Comment, rootParentId: number | null = null) => {
+    const replyTargetId = rootParentId ?? c.id;
+    return (
+      <div key={c.id} className="mb-2 small">
+        <div className="d-flex justify-content-between align-items-start">
+          <div>
+            <Link to={`/user/${c.user_id}`} className="text-dark fw-bold text-decoration-none">{c.username}</Link>
+            <span className="text-muted ms-2">{formatDate(c.created_at)}</span>
+          </div>
+          {currentUserId && String(currentUserId) === String(c.user_id) && (
+            <button className="btn btn-link btn-sm text-danger p-0" onClick={() => handleDeleteComment(c.id)}>✕</button>
+          )}
+        </div>
+        <div>{c.body}</div>
+        <div className="d-flex gap-2 mt-1">
+          <button className="btn btn-link btn-sm p-0 text-muted" onClick={() => handleReply(c.username, replyTargetId)}>ответить</button>
+          {c.replies && c.replies.length > 0 && !c.parent_id && (
+            <button className="btn btn-link btn-sm p-0 text-muted" onClick={() => toggleReplies(c.id)}>
+              {showReplies[c.id] ? "скрыть ответы" : `ответы (${c.replies.length})`}
+            </button>
+          )}
+        </div>
+        {c.replies && c.replies.length > 0 && showReplies[c.id] && (
+          <div style={{ marginLeft: 16, borderLeft: "2px solid #eee", paddingLeft: 12 }} className="mt-1">
+            {c.replies.map(reply => renderComment(reply, replyTargetId))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <div className="border-top px-2 py-1">
+        <button className="btn btn-sm btn-link text-muted p-0" onClick={() => { setShowComments(!showComments); if (!showComments) fetchComments(); }}>
+          💬 {countAll(comments) || ""}
+        </button>
+      </div>
+      {showComments && (
+        <div className="border-top p-2 text-start">
+          {comments.map(c => renderComment(c))}
+          {token && (
+            <div className="d-flex mt-2">
+              <input
+                type="text"
+                className="form-control form-control-sm"
+                placeholder={replyTo ? `Ответ ${replyTo.username}...` : "Добавить комментарий..."}
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+                onKeyDown={e => { if (e.key === "Enter") handleAddComment(replyTo?.parentId ?? null, replyTo?.username ?? null); }}
+              />
+              <button className="btn btn-sm btn-outline-primary ms-1" disabled={sending} onClick={() => handleAddComment(replyTo?.parentId ?? null, replyTo?.username ?? null)}>
+                {sending ? "..." : "→"}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
