@@ -1,5 +1,5 @@
-from pydantic import BaseModel
 from datetime import datetime
+from pydantic import BaseModel
 
 class CommentCreate(BaseModel):
     body: str
@@ -12,3 +12,4 @@ class CommentOut(BaseModel):
     created_at: datetime
     parent_id: int | None = None
     replies: list["CommentOut"] = []
+    user_id: int

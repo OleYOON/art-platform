@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database import get_db
@@ -59,3 +59,20 @@ async def get_comments(artwork_id: int, db: AsyncSession = Depends(get_db)):
         .order_by(Comment.created_at)
     )
     return build_comment_tree(result.all())
+
+@router.delete("/{artwork_id}/comments/{comment_id}")
+async def delete_comment(
+    artwork_id: int,
+    comment_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Comment).where(Comment.id == comment_id))
+    comment = result.scalar()
+    if not comment:
+        raise HTTPException(status_code=404)
+    if comment.user_id != current_user.id:
+        raise HTTPException(status_code=403)
+    await db.delete(comment)
+    await db.commit()
+    return {"ok": True}
