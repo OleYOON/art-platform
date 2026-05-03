@@ -1,3 +1,8 @@
 body {
   background-color: #f5f0eb;
 }
+
+.card, .border.rounded {
+  background-color: #fff;
+  border: 1px solid #e8e3dd !important;
+}
