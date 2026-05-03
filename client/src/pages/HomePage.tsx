@@ -121,7 +121,7 @@ export default function HomePage() {
             ответить
           </button>
         )}
-        {c.replies && c.replies.length > 0 && (
+        {c.replies && c.replies.length > 0 && !c.parent_id && (
           <button className="btn btn-link btn-sm p-0 text-muted" onClick={() => toggleReplies(c.id)}>
             {showReplies[c.id] ? "скрыть ответы" : `ответы (${c.replies.length})`}
           </button>
