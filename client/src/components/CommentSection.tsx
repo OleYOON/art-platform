@@ -41,8 +41,6 @@ interface Props {
   onEditArtwork?: () => void;
 }
 
-
-
 export default function CommentSection({ artworkId, token, currentUserId, onDeleteArtwork, onEditArtwork }: Props) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [showComments, setShowComments] = useState(false);
@@ -50,6 +48,9 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
   const [replyTo, setReplyTo] = useState<{ username: string; parentId: number } | null>(null);
   const [newComment, setNewComment] = useState("");
   const [sending, setSending] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const [likesLoading, setLikesLoading] = useState(false);
 
   const fetchComments = () => {
     fetch(`${API}/artworks/${artworkId}/comments`)
@@ -57,11 +58,40 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
       .then(data => setComments(data));
   };
 
+  const fetchLikes = () => {
+    fetch(`${API}/artworks/${artworkId}`)
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setLiked(data[0].liked);
+          setLikesCount(data[0].likes_count || 0);
+        }
+      })
+      .catch(() => {});
+  };
+
   useEffect(() => {
     fetchComments();
-    const interval = setInterval(fetchComments, 5000);
+    fetchLikes();
+    const interval = setInterval(() => { fetchComments(); fetchLikes(); }, 5000);
     return () => clearInterval(interval);
   }, [artworkId]);
+
+  const handleLike = async () => {
+    if (!token || likesLoading) return;
+    setLikesLoading(true);
+    try {
+      const res = await fetch(`${API}/artworks/${artworkId}/like`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setLiked(data.liked);
+      setLikesCount(prev => data.liked ? prev + 1 : prev - 1);
+    } finally {
+      setLikesLoading(false);
+    }
+  };
 
   const handleAddComment = async (parentId: number | null = null, replyUsername: string | null = null) => {
     if (sending) return;
@@ -133,6 +163,14 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
   return (
     <>
       <div className="comment-bar d-flex justify-content-end gap-3 border-top px-2 py-1">
+        <button
+          className="btn btn-sm p-0 border-0 bg-transparent"
+          style={{ color: liked ? "#FE6D73" : "#b9adcc", textDecoration: "none" }}
+          onClick={handleLike}
+          disabled={likesLoading}
+        >
+          {liked ? "❤️" : "♡"} {likesCount > 0 ? likesCount : ""}
+        </button>
         {currentUserId && onEditArtwork && (
           <button
             className="btn btn-sm text-muted p-0 border-0 bg-transparent"

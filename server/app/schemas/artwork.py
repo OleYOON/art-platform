@@ -17,5 +17,7 @@ class ArtworkOut(BaseModel):
     user_id: int
     username: str
     avatar_url: str | None = None
+    likes_count: int = 0
+    liked: bool = False
 
 ArtworkOut.model_rebuild()

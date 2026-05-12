@@ -5,7 +5,7 @@ from app.database import engine, Base
 from app.routers import auth, artworks, comments
 import os
 import uvicorn
-
+from app.models import like
 
 
 @asynccontextmanager

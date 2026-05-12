@@ -10,10 +10,11 @@ from app.models.user import User
 from app.models.artwork import Artwork, Tag, artwork_tag
 from app.schemas.artwork import ArtworkOut
 from app.routers.auth import get_current_user
+from app.models.like import Like
 
 router = APIRouter(prefix="/artworks", tags=["artworks"])
 
-def build_artwork_out(a: Artwork, username: str, tags: list[str], avatar_url: str | None = None) -> ArtworkOut:
+def build_artwork_out(a: Artwork, username: str, tags: list[str], avatar_url: str | None = None, likes_count: int = 0, liked: bool = False) -> ArtworkOut:
     return ArtworkOut(
         id=a.id,
         title=a.title,
@@ -24,6 +25,8 @@ def build_artwork_out(a: Artwork, username: str, tags: list[str], avatar_url: st
         username=username,
         avatar_url=avatar_url,
         created_at=a.created_at,
+        likes_count=likes_count,
+        liked=liked,
     )
 
 
@@ -179,3 +182,25 @@ async def update_artwork(
     return build_artwork_out(
         artwork, current_user.username, tags_list, current_user.avatar_url
     )
+
+
+@router.post("/{artwork_id}/like")
+async def toggle_like(
+    artwork_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    existing = await db.execute(
+        select(Like).where(Like.artwork_id == artwork_id, Like.user_id == current_user.id)
+    )
+    like = existing.scalar()
+    
+    if like:
+        await db.delete(like)
+        await db.commit()
+        return {"liked": False}
+    else:
+        new_like = Like(user_id=current_user.id, artwork_id=artwork_id)
+        db.add(new_like)
+        await db.commit()
+        return {"liked": True}

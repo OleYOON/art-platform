@@ -10,6 +10,7 @@ artwork_tag = Table(
     Column("tag_id", ForeignKey("tags.id", ondelete="CASCADE"), primary_key=True),
 )
 
+likes = relationship("Like", backref="artwork", cascade="all, delete-orphan")
 
 class Artwork(Base):
     __tablename__ = "artworks"
