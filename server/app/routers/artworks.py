@@ -129,3 +129,52 @@ async def delete_artwork(
     await db.delete(artwork)
     await db.commit()
     return {"ok": True}
+
+    @router.patch("/{artwork_id}", response_model=ArtworkOut)
+async def update_artwork(
+    artwork_id: int,
+    title: str | None = None,
+    description: str | None = None,
+    tags: str | None = None,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(select(Artwork).where(Artwork.id == artwork_id))
+    artwork = result.scalar()
+    if not artwork:
+        raise HTTPException(status_code=404, detail="Работа не найдена")
+    if artwork.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Нельзя редактировать чужую работу")
+
+    if title is not None:
+        artwork.title = title
+    if description is not None:
+        artwork.description = description
+
+    if tags is not None:
+        await db.execute(
+            artwork_tag.delete().where(artwork_tag.c.artwork_id == artwork.id)
+        )
+        tag_list = [t.strip().lower() for t in tags.split(",") if t.strip()]
+        for tag_name in tag_list:
+            result_tag = await db.execute(select(Tag).where(Tag.name == tag_name))
+            tag = result_tag.scalar()
+            if not tag:
+                tag = Tag(name=tag_name)
+                db.add(tag)
+                await db.flush()
+            await db.execute(
+                artwork_tag.insert().values(artwork_id=artwork.id, tag_id=tag.id)
+            )
+
+    await db.commit()
+    await db.refresh(artwork)
+
+    tag_result = await db.execute(
+        select(Tag.name).join(artwork_tag).where(artwork_tag.c.artwork_id == artwork.id)
+    )
+    tags_list = [t for t in tag_result.scalars().all()]
+
+    return build_artwork_out(
+        artwork, current_user.username, tags_list, current_user.avatar_url
+    )

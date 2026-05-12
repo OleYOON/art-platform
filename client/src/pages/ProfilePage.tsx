@@ -27,6 +27,10 @@ export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
   const [bio, setBio] = useState("");
   const [artworks, setArtworks] = useState<Artwork[]>([]);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editTags, setEditTags] = useState("");
   const token = localStorage.getItem("token");
   const currentUserId = token ? JSON.parse(atob(token.split(".")[1])).sub : null;
   const navigate = useNavigate();
@@ -49,14 +53,35 @@ export default function ProfilePage() {
     if (res.ok) setArtworks(await res.json());
   };
 
-const handleDelete = async (artworkId: number) => {
-  if (!confirm("Вы уверены, что хотите удалить эту работу?")) return;
-  await fetch(`${API}/artworks/${artworkId}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (user) fetchMyArtworks(user.id);
-};
+  const handleDelete = async (artworkId: number) => {
+    if (!confirm("Вы уверены, что хотите удалить эту работу?")) return;
+    await fetch(`${API}/artworks/${artworkId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (user) fetchMyArtworks(user.id);
+  };
+
+  const startEdit = (a: Artwork) => {
+    setEditId(a.id);
+    setEditTitle(a.title);
+    setEditDescription("");
+    setEditTags(a.tags.join(", "));
+  };
+
+  const handleEditSave = async (artworkId: number) => {
+    const params = new URLSearchParams();
+    if (editTitle) params.set("title", editTitle);
+    if (editDescription) params.set("description", editDescription);
+    if (editTags) params.set("tags", editTags);
+
+    await fetch(`${API}/artworks/${artworkId}?${params.toString()}`, {
+      method: "PATCH",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setEditId(null);
+    if (user) fetchMyArtworks(user.id);
+  };
 
   useEffect(() => { fetchProfile(); }, []);
 
@@ -110,6 +135,46 @@ const handleDelete = async (artworkId: number) => {
             <p className="mb-1"><strong>{a.title}</strong></p>
             <p className="text-muted small mb-1">{formatDate(a.created_at)}</p>
             {a.tags.map(t => <span key={t} className="badge bg-secondary me-1">{t}</span>)}
+
+            <button className="btn btn-outline-light btn-sm mt-2 ms-2" onClick={() => startEdit(a)}>
+              Редактировать
+            </button>
+
+            {editId === a.id && (
+              <div className="p-2 mt-2 border-top" style={{ backgroundColor: "#7c6fa0" }}>
+                <input
+                  className="form-control form-control-sm mb-1"
+                  placeholder="Название"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                />
+                <textarea
+                  className="form-control form-control-sm mb-1"
+                  placeholder="Описание"
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  rows={2}
+                />
+                <input
+                  className="form-control form-control-sm mb-2"
+                  placeholder="Теги (через запятую)"
+                  value={editTags}
+                  onChange={(e) => setEditTags(e.target.value)}
+                />
+                <button
+                  className="btn btn-success btn-sm me-2"
+                  onClick={() => handleEditSave(a.id)}
+                >
+                  Сохранить
+                </button>
+                <button
+                  className="btn btn-outline-secondary btn-sm"
+                  onClick={() => setEditId(null)}
+                >
+                  Отмена
+                </button>
+              </div>
+            )}
           </div>
           <CommentSection
             artworkId={a.id}
