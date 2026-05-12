@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const API = import.meta.env.VITE_API_URL;
+import { apiFetch } from "../api";
 
 export interface Comment {
   id: number;
@@ -53,13 +53,13 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
   const [likesLoading, setLikesLoading] = useState(false);
 
   const fetchComments = () => {
-    fetch(`${API}/artworks/${artworkId}/comments`)
+    apiFetch(`/artworks/${artworkId}/comments`)
       .then(r => r.json())
       .then(data => setComments(data));
   };
 
 const fetchLikes = () => {
-  fetch(`${API}/artworks/${artworkId}/likes`, {
+  apiFetch(`/artworks/${artworkId}/likes`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   })
     .then(r => r.json())
@@ -81,7 +81,7 @@ useEffect(() => {
     if (!token || likesLoading) return;
     setLikesLoading(true);
     try {
-      const res = await fetch(`${API}/artworks/${artworkId}/like`, {
+      const res = await apiFetch(`/artworks/${artworkId}/like`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -101,7 +101,7 @@ useEffect(() => {
     setSending(true);
     setNewComment("");
     try {
-      await fetch(`${API}/artworks/${artworkId}/comments`, {
+      await apiFetch(`/artworks/${artworkId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ body, parent_id: parentId }),
@@ -114,7 +114,7 @@ useEffect(() => {
   };
 
   const handleDeleteComment = async (commentId: number) => {
-    await fetch(`${API}/artworks/${artworkId}/comments/${commentId}`, {
+    await apiFetch(`$/artworks/${artworkId}/comments/${commentId}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

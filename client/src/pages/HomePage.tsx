@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CommentSection from "../components/CommentSection";
 
-const API = import.meta.env.VITE_API_URL;
+import { apiFetch } from "../api";
 
 interface Artwork {
   id: number;
@@ -38,8 +38,8 @@ export default function HomePage() {
     const params = new URLSearchParams();
     if (tag) params.set("tag", tag);
     if (searchTerm) params.set("search", searchTerm);
-    const url = `${API}/artworks/${params.toString() ? "?" + params.toString() : ""}`;
-    fetch(url).then(r => r.json()).then(data => setArtworks(data));
+    const url = `/artworks/${params.toString() ? "?" + params.toString() : ""}`;
+    apiFetch(url).then(r => r.json()).then(data => setArtworks(data));
   };
 
   const handleTagClick = (tag: string) => {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import CommentSection from "../components/CommentSection";
 
-const API = import.meta.env.VITE_API_URL;
+import { apiFetch } from "../api";
 
 interface Artwork {
   id: number;
@@ -37,7 +37,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
 
   const fetchProfile = async () => {
-    const res = await fetch(`${API}/auth/me`, {
+    const res = await apiFetch(`/auth/me`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (res.status === 401) { localStorage.removeItem("token"); navigate("/login"); return; }
@@ -50,13 +50,13 @@ export default function ProfilePage() {
   };
 
   const fetchMyArtworks = async (userId: number) => {
-    const res = await fetch(`${API}/artworks/user/${userId}`);
+    const res = await apiFetch(`/artworks/user/${userId}`);
     if (res.ok) setArtworks(await res.json());
   };
 
   const handleDelete = async (artworkId: number) => {
     if (!confirm("Вы уверены, что хотите удалить эту работу?")) return;
-    await fetch(`${API}/artworks/${artworkId}`, {
+    await apiFetch(`/artworks/${artworkId}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -76,7 +76,7 @@ const startEdit = (a: Artwork) => {
     if (editDescription) params.set("description", editDescription);
     if (editTags) params.set("tags", editTags);
 
-    await fetch(`${API}/artworks/${artworkId}?${params.toString()}`, {
+    await apiFetch(`/artworks/${artworkId}?${params.toString()}`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -87,7 +87,7 @@ const startEdit = (a: Artwork) => {
   useEffect(() => { fetchProfile(); }, []);
 
   const handleUpdate = async () => {
-    await fetch(`${API}/auth/me?bio=${encodeURIComponent(bio)}`, {
+    await apiFetch(`/auth/me?bio=${encodeURIComponent(bio)}`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -112,7 +112,7 @@ const startEdit = (a: Artwork) => {
               if (!file) return;
               const formData = new FormData();
               formData.append("file", file);
-              await fetch(`${API}/auth/me/avatar`, { method: "PATCH", headers: { Authorization: `Bearer ${token}` }, body: formData });
+              await apiFetch(`/auth/me/avatar`, { method: "PATCH", headers: { Authorization: `Bearer ${token}` }, body: formData });
               fetchProfile();
             }} />
           </label>

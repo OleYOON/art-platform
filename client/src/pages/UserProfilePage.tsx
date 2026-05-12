@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-
-const API = import.meta.env.VITE_API_URL;
+import { apiFetch } from "../api";
 
 interface Artwork {
   id: number;
@@ -19,10 +18,10 @@ export default function UserProfilePage() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
 
   useEffect(() => {
-    fetch(`${API}/auth/profile/${userId}`)
+    apiFetch(`/auth/profile/${userId}`)
       .then((r) => r.json())
       .then(setProfile);
-    fetch(`${API}/artworks/user/${userId}`)
+    apiFetch(`/artworks/user/${userId}`)
       .then((r) => r.json())
       .then(setArtworks);
   }, [userId]);

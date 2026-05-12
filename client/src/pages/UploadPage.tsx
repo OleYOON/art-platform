@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const API = import.meta.env.VITE_API_URL;
+import { apiFetch } from "../api";
 
 export default function UploadPage() {
   const [title, setTitle] = useState("");
@@ -26,7 +25,7 @@ export default function UploadPage() {
     formData.append("file", file);
 
     try {
-      const res = await fetch(`${API}/artworks/`, {
+      const res = await apiFetch(`/artworks/`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
