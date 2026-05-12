@@ -134,8 +134,8 @@ const startEdit = (a: Artwork) => {
           <img src={a.image_url} alt={a.title} style={{ width: "100%" }} />
           <div className="p-2">
             <p className="mb-1"><strong>{a.title}</strong></p>
-            <p className="text-muted small mb-1">{formatDate(a.created_at)}</p>
             {a.description && <p className="text-muted small mb-1">{a.description}</p>}
+            <p className="text-muted small mb-1">{formatDate(a.created_at)}</p>  
             {a.tags.map(t => <span key={t} className="badge bg-secondary me-1">{t}</span>)}
 
             {editId === a.id && (
