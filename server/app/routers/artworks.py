@@ -204,3 +204,23 @@ async def toggle_like(
         db.add(new_like)
         await db.commit()
         return {"liked": True}
+
+from sqlalchemy import func
+
+@router.get("/{artwork_id}/likes")
+async def get_likes(
+    artwork_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    likes_count_result = await db.execute(
+        select(func.count(Like.user_id)).where(Like.artwork_id == artwork_id)
+    )
+    likes_count = likes_count_result.scalar() or 0
+    
+    liked_result = await db.execute(
+        select(Like).where(Like.artwork_id == artwork_id, Like.user_id == current_user.id)
+    )
+    liked = liked_result.scalar() is not None
+    
+    return {"likes_count": likes_count, "liked": liked}
