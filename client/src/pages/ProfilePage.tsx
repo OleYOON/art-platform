@@ -135,6 +135,7 @@ const startEdit = (a: Artwork) => {
           <div className="p-2">
             <p className="mb-1"><strong>{a.title}</strong></p>
             <p className="text-muted small mb-1">{formatDate(a.created_at)}</p>
+            {a.description && <p className="text-muted small mb-1">{a.description}</p>}
             {a.tags.map(t => <span key={t} className="badge bg-secondary me-1">{t}</span>)}
 
             {editId === a.id && (
