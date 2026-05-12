@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import CommentSection from "../components/CommentSection";
-
 import { apiFetch } from "../api";
 
 interface Artwork {
@@ -11,6 +10,9 @@ interface Artwork {
   image_url: string;
   tags: string[];
   created_at: string;
+  user_id: number;
+  username: string;
+  avatar_url: string | null;
 }
 
 function formatDate(iso: string) {
@@ -32,6 +34,11 @@ export default function ProfilePage() {
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editTags, setEditTags] = useState("");
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [editUsername, setEditUsername] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editBio, setEditBio] = useState("");
+  const [editAvatar, setEditAvatar] = useState<File | null>(null);
   const token = localStorage.getItem("token");
   const currentUserId = token ? JSON.parse(atob(token.split(".")[1])).sub : null;
   const navigate = useNavigate();
@@ -63,12 +70,12 @@ export default function ProfilePage() {
     if (user) fetchMyArtworks(user.id);
   };
 
-const startEdit = (a: Artwork) => {
-  setEditId(a.id);
-  setEditTitle(a.title);
-  setEditDescription(a.description || "");
-  setEditTags(a.tags.join(", "));
-};
+  const startEdit = (a: Artwork) => {
+    setEditId(a.id);
+    setEditTitle(a.title);
+    setEditDescription(a.description || "");
+    setEditTags(a.tags.join(", "));
+  };
 
   const handleEditSave = async (artworkId: number) => {
     const params = new URLSearchParams();
@@ -84,15 +91,44 @@ const startEdit = (a: Artwork) => {
     if (user) fetchMyArtworks(user.id);
   };
 
-  useEffect(() => { fetchProfile(); }, []);
+  const startProfileEdit = () => {
+    setEditingProfile(true);
+    setEditUsername(user.username);
+    setEditEmail(user.email);
+    setEditBio(bio);
+    setEditAvatar(null);
+  };
 
-  const handleUpdate = async () => {
-    await apiFetch(`/auth/me?bio=${encodeURIComponent(bio)}`, {
-      method: "PATCH",
-      headers: { Authorization: `Bearer ${token}` },
-    });
+  const handleProfileSave = async () => {
+    // Имя
+    if (editUsername !== user.username) {
+      await apiFetch(`/auth/me/username?username=${encodeURIComponent(editUsername)}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
+    // Описание
+    if (editBio !== bio) {
+      await apiFetch(`/auth/me?bio=${encodeURIComponent(editBio)}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    }
+    // Аватарка
+    if (editAvatar) {
+      const formData = new FormData();
+      formData.append("file", editAvatar);
+      await apiFetch(`/auth/me/avatar`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+    }
+    setEditingProfile(false);
     fetchProfile();
   };
+
+  useEffect(() => { fetchProfile(); }, []);
 
   if (!user) return <p className="text-center mt-5">Загрузка...</p>;
 
@@ -100,80 +136,97 @@ const startEdit = (a: Artwork) => {
     <div className="container mt-4" style={{ maxWidth: 600 }}>
       <Link to="/" className="btn btn-outline-secondary mb-3">← Назад</Link>
       <h1>Профиль</h1>
+
+      {/* Карточка профиля */}
       <div className="card p-3 mb-3">
-        <div className="mb-3 text-center">
-          <div style={{ width: 120, height: 120, overflow: "hidden", borderRadius: "50%", margin: "0 auto" }}>
-            <img src={user.avatar_url || "https://placehold.co/120x120"} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          </div>
-          <label className="btn btn-outline-secondary btn-sm mt-2">
-            Выбрать фото
-            <input type="file" accept="image/*" hidden onChange={async (e) => {
-              const file = e.target.files?.[0];
-              if (!file) return;
-              const formData = new FormData();
-              formData.append("file", file);
-              await apiFetch(`/auth/me/avatar`, { method: "PATCH", headers: { Authorization: `Bearer ${token}` }, body: formData });
-              fetchProfile();
-            }} />
-          </label>
-        </div>
-        <p><strong>Имя:</strong> {user.username}</p>
-        <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Роль:</strong> {user.role}</p>
+        {!editingProfile ? (
+          <>
+            <div className="mb-3 text-center">
+              <div style={{ width: 120, height: 120, overflow: "hidden", borderRadius: "50%", margin: "0 auto" }}>
+                <img src={user.avatar_url || "https://placehold.co/120x120"} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+            </div>
+            <p><strong>Имя:</strong> {user.username}</p>
+            <p><strong>Email:</strong> {user.email}</p>
+            <p><strong>Роль:</strong> {user.role}</p>
+            <p><strong>О себе:</strong> {bio || "—"}</p>
+            <button className="btn btn-primary btn-sm mt-2" onClick={startProfileEdit}>Редактировать профиль</button>
+          </>
+        ) : (
+          <>
+            <div className="mb-3 text-center">
+              <div style={{ width: 120, height: 120, overflow: "hidden", borderRadius: "50%", margin: "0 auto" }}>
+                <img
+                  src={editAvatar ? URL.createObjectURL(editAvatar) : (user.avatar_url || "https://placehold.co/120x120")}
+                  alt="avatar"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+              <label className="btn btn-outline-secondary btn-sm mt-2">
+                Сменить фото
+                <input type="file" accept="image/*" hidden onChange={(e) => setEditAvatar(e.target.files?.[0] || null)} />
+              </label>
+            </div>
+            <div className="mb-2">
+              <label className="form-label">Имя</label>
+              <input className="form-control form-control-sm" value={editUsername} onChange={(e) => setEditUsername(e.target.value)} />
+            </div>
+            <div className="mb-2">
+              <label className="form-label">Email</label>
+              <input className="form-control form-control-sm" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} disabled />
+            </div>
+            <div className="mb-2">
+              <label className="form-label">О себе</label>
+              <textarea className="form-control form-control-sm" value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} />
+            </div>
+            <button className="btn btn-success btn-sm me-2" onClick={handleProfileSave}>Сохранить</button>
+            <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditingProfile(false)}>Отмена</button>
+          </>
+        )}
       </div>
-      <div className="mb-2">
-        <label className="form-label">О себе</label>
-        <textarea className="form-control" value={bio} onChange={(e) => setBio(e.target.value)} rows={3} />
-      </div>
-      <button className="btn btn-primary" onClick={handleUpdate}>Сохранить</button>
-      <button className="btn btn-outline-danger ms-2" onClick={() => { localStorage.removeItem("token"); navigate("/login"); }}>Выйти</button>
+
+      <button className="btn btn-outline-danger" onClick={() => { localStorage.removeItem("token"); navigate("/login"); }}>Выйти</button>
 
       <h2 className="mt-5">Мои работы</h2>
       {artworks.map((a) => (
         <div key={a.id} className="mb-4 border rounded">
+          {/* Шапка */}
+          <div className="d-flex align-items-center p-2">
+            <Link to={`/user/${a.user_id}`} className="text-decoration-none d-flex align-items-center">
+              <div style={{ width: 36, height: 36, overflow: "hidden", borderRadius: "50%", marginRight: 10 }}>
+                <img
+                  src={a.avatar_url || user.avatar_url || "https://placehold.co/36x36"}
+                  alt=""
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+              <strong className="text-dark">{a.username || user.username}</strong>
+            </Link>
+            <span className="ms-auto text-muted small">{formatDate(a.created_at)}</span>
+          </div>
+
           <img src={a.image_url} alt={a.title} style={{ width: "100%" }} />
+
           <div className="p-2">
             <p className="mb-1"><strong>{a.title}</strong></p>
             {a.description && <p className="text-muted small mb-1">{a.description}</p>}
-            <p className="text-muted small mb-1">{formatDate(a.created_at)}</p>  
-            {a.tags.map(t => <span key={t} className="badge bg-secondary me-1">{t}</span>)}
-
-            {editId === a.id && (
-              <div className="p-2 mt-2 border-top" style={{ backgroundColor: "#7c6fa0" }}>
-                <input
-                  className="form-control form-control-sm mb-1"
-                  placeholder="Название"
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                />
-                <textarea
-                  className="form-control form-control-sm mb-1"
-                  placeholder="Описание"
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
-                  rows={2}
-                />
-                <input
-                  className="form-control form-control-sm mb-2"
-                  placeholder="Теги (через запятую)"
-                  value={editTags}
-                  onChange={(e) => setEditTags(e.target.value)}
-                />
-                <button
-                  className="btn btn-success btn-sm me-2"
-                  onClick={() => handleEditSave(a.id)}
-                >
-                  Сохранить
-                </button>
-                <button
-                  className="btn btn-outline-secondary btn-sm"
-                  onClick={() => setEditId(null)}
-                >
-                  Отмена
-                </button>
-              </div>
+            {a.tags.length > 0 && (
+              <p className="mb-0">
+                {a.tags.map(t => <span key={t} className="badge bg-secondary me-1">{t}</span>)}
+              </p>
             )}
           </div>
+
+          {editId === a.id && (
+            <div className="p-2 border-top" style={{ backgroundColor: "#7c6fa0" }}>
+              <input className="form-control form-control-sm mb-1" placeholder="Название" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} />
+              <textarea className="form-control form-control-sm mb-1" placeholder="Описание" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows={2} />
+              <input className="form-control form-control-sm mb-2" placeholder="Теги (через запятую)" value={editTags} onChange={(e) => setEditTags(e.target.value)} />
+              <button className="btn btn-success btn-sm me-2" onClick={() => handleEditSave(a.id)}>Сохранить</button>
+              <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditId(null)}>Отмена</button>
+            </div>
+          )}
+
           <CommentSection
             artworkId={a.id}
             token={token}
