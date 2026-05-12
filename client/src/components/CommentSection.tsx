@@ -70,12 +70,12 @@ const fetchLikes = () => {
     .catch(() => {});
 };
 
-  useEffect(() => {
-    fetchComments();
-    fetchLikes();
-    const interval = setInterval(() => { fetchComments(); fetchLikes(); }, 5000);
-    return () => clearInterval(interval);
-  }, [artworkId]);
+useEffect(() => {
+  fetchComments();
+  fetchLikes();
+  const interval = setInterval(() => { fetchComments(); fetchLikes(); }, 5000);
+  return () => clearInterval(interval);
+}, [artworkId]);
 
   const handleLike = async () => {
     if (!token || likesLoading) return;
@@ -169,8 +169,10 @@ const fetchLikes = () => {
           onClick={handleLike}
           disabled={likesLoading}
         >
-          {liked ? "❤️" : "♡"} {likesCount > 0 ? likesCount : ""}
+          <span style={{ color: liked ? "#FE6D73" : "#b9adcc" }}>{liked ? "❤️" : "♡"}</span>
+          <span style={{ color: "#b9adcc" }}> {likesCount > 0 ? likesCount : ""}</span>
         </button>
+
         {currentUserId && onEditArtwork && (
           <button
             className="btn btn-sm text-muted p-0 border-0 bg-transparent"
