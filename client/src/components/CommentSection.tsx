@@ -73,7 +73,7 @@ const fetchLikes = () => {
 useEffect(() => {
   fetchComments();
   fetchLikes();
-  const interval = setInterval(() => { fetchComments(); fetchLikes(); }, 5000);
+  const interval = setInterval(() => { fetchComments(); fetchLikes(); }, 10000);
   return () => clearInterval(interval);
 }, [artworkId]);
 
