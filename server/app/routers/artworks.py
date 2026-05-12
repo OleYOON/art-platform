@@ -130,7 +130,8 @@ async def delete_artwork(
     await db.commit()
     return {"ok": True}
 
-    @router.patch("/{artwork_id}", response_model=ArtworkOut)
+
+@router.patch("/{artwork_id}", response_model=ArtworkOut)
 async def update_artwork(
     artwork_id: int,
     title: str | None = None,
