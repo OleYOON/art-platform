@@ -4,7 +4,7 @@ import cloudinary
 import cloudinary.uploader
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, func
 from app.database import get_db
 from app.models.user import User
 from app.models.artwork import Artwork, Tag, artwork_tag
@@ -204,8 +204,6 @@ async def toggle_like(
         db.add(new_like)
         await db.commit()
         return {"liked": True}
-
-from sqlalchemy import func
 
 @router.get("/{artwork_id}/likes")
 async def get_likes(
