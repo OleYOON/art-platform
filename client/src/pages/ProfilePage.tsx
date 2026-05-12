@@ -7,6 +7,7 @@ const API = import.meta.env.VITE_API_URL;
 interface Artwork {
   id: number;
   title: string;
+  description: string | null;
   image_url: string;
   tags: string[];
   created_at: string;
@@ -62,12 +63,12 @@ export default function ProfilePage() {
     if (user) fetchMyArtworks(user.id);
   };
 
-  const startEdit = (a: Artwork) => {
-    setEditId(a.id);
-    setEditTitle(a.title);
-    setEditDescription("");
-    setEditTags(a.tags.join(", "));
-  };
+const startEdit = (a: Artwork) => {
+  setEditId(a.id);
+  setEditTitle(a.title);
+  setEditDescription(a.description || "");
+  setEditTags(a.tags.join(", "));
+};
 
   const handleEditSave = async (artworkId: number) => {
     const params = new URLSearchParams();
