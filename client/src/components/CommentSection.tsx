@@ -162,42 +162,45 @@ useEffect(() => {
 
   return (
     <>
-      <div className="comment-bar d-flex justify-content-end gap-3 border-top px-2 py-1">
-        <button
-          className="btn btn-sm p-0 border-0 bg-transparent"
-          style={{ color: liked ? "#FE6D73" : "#b9adcc", textDecoration: "none" }}
-          onClick={handleLike}
-          disabled={likesLoading}
-        >
-          <span style={{ color: liked ? "#FE6D73" : "#b9adcc" }}>{liked ? "❤️" : "♡"}</span>
-          <span style={{ color: "#b9adcc" }}> {likesCount > 0 ? likesCount : ""}</span>
-        </button>
-
-        {currentUserId && onEditArtwork && (
+      <div className="comment-bar d-flex justify-content-between border-top px-2 py-1">
+        <div className="d-flex gap-3">
+          {currentUserId && onEditArtwork && (
+            <button
+              className="btn btn-sm text-muted p-0 border-0 bg-transparent"
+              style={{ textDecoration: "none" }}
+              onClick={onEditArtwork}
+            >
+              ✎
+            </button>
+          )}
+          {currentUserId && onDeleteArtwork && (
+            <button
+              className="btn btn-sm text-danger p-0 border-0 bg-transparent"
+              style={{ textDecoration: "none" }}
+              onClick={onDeleteArtwork}
+            >
+              🗑
+            </button>
+          )}
+        </div>
+        <div className="d-flex gap-3">
+          <button
+            className="btn btn-sm p-0 border-0 bg-transparent"
+            style={{ color: liked ? "#FE6D73" : "#b9adcc", textDecoration: "none" }}
+            onClick={handleLike}
+            disabled={likesLoading}
+          >
+            <span style={{ color: liked ? "#FE6D73" : "#b9adcc" }}>{liked ? "❤️" : "♡"}</span>
+            <span style={{ color: "#b9adcc" }}> {likesCount > 0 ? likesCount : ""}</span>
+          </button>
           <button
             className="btn btn-sm text-muted p-0 border-0 bg-transparent"
             style={{ textDecoration: "none" }}
-            onClick={onEditArtwork}
+            onClick={() => { setShowComments(!showComments); if (!showComments) fetchComments(); }}
           >
-            ✎
+            💬 {countAll(comments)}
           </button>
-        )}
-        {currentUserId && onDeleteArtwork && (
-          <button
-            className="btn btn-sm text-danger p-0 border-0 bg-transparent"
-            style={{ textDecoration: "none" }}
-            onClick={onDeleteArtwork}
-          >
-            🗑
-          </button>
-        )}
-        <button
-          className="btn btn-sm text-muted p-0 border-0 bg-transparent"
-          style={{ textDecoration: "none" }}
-          onClick={() => { setShowComments(!showComments); if (!showComments) fetchComments(); }}
-        >
-          💬 {countAll(comments)}
-        </button>
+        </div>
       </div>
       {showComments && (
         <div className="comment-block border-top p-2 text-start">
