@@ -109,3 +109,11 @@ async def upload_avatar(
     await db.commit()
     await db.refresh(current_user)
     return current_user
+
+async def get_current_user_optional(
+    credentials: HTTPAuthorizationCredentials | None = Depends(HTTPBearer(auto_error=False)),
+    db: AsyncSession = Depends(get_db),
+) -> User | None:
+    if not credentials:
+        return None
+    return await get_current_user(credentials, db)

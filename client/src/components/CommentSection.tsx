@@ -58,17 +58,17 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
       .then(data => setComments(data));
   };
 
-  const fetchLikes = () => {
-    fetch(`${API}/artworks/${artworkId}`)
-      .then(r => r.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          setLiked(data[0].liked);
-          setLikesCount(data[0].likes_count || 0);
-        }
-      })
-      .catch(() => {});
-  };
+const fetchLikes = () => {
+  fetch(`${API}/artworks/${artworkId}/likes`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  })
+    .then(r => r.json())
+    .then(data => {
+      setLiked(data.liked);
+      setLikesCount(data.likes_count);
+    })
+    .catch(() => {});
+};
 
   useEffect(() => {
     fetchComments();
