@@ -17,7 +17,7 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
     headers,
   });
 
-  if (res.status === 401) {
+  if (res.status === 401 && token) {
     localStorage.removeItem("token");
     window.location.href = "/login";
   }
