@@ -136,10 +136,6 @@ export default function ProfilePage() {
             <p className="text-muted small mb-1">{formatDate(a.created_at)}</p>
             {a.tags.map(t => <span key={t} className="badge bg-secondary me-1">{t}</span>)}
 
-            <button className="btn btn-outline-light btn-sm mt-2 ms-2" onClick={() => startEdit(a)}>
-              Редактировать
-            </button>
-
             {editId === a.id && (
               <div className="p-2 mt-2 border-top" style={{ backgroundColor: "#7c6fa0" }}>
                 <input
@@ -181,6 +177,7 @@ export default function ProfilePage() {
             token={token}
             currentUserId={currentUserId}
             onDeleteArtwork={() => handleDelete(a.id)}
+            onEditArtwork={() => startEdit(a)}
           />
         </div>
       ))}

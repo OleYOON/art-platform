@@ -38,9 +38,12 @@ interface Props {
   token: string | null;
   currentUserId: string | null;
   onDeleteArtwork?: () => void;
+  onEditArtwork?: () => void;
 }
 
-export default function CommentSection({ artworkId, token, currentUserId, onDeleteArtwork }: Props) {
+
+
+export default function CommentSection({ artworkId, token, currentUserId, onDeleteArtwork, onEditArtwork }: Props) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [showComments, setShowComments] = useState(false);
   const [showReplies, setShowReplies] = useState<Record<number, boolean>>({});
@@ -130,6 +133,15 @@ export default function CommentSection({ artworkId, token, currentUserId, onDele
   return (
     <>
       <div className="comment-bar d-flex justify-content-end gap-3 border-top px-2 py-1">
+        {currentUserId && onEditArtwork && (
+          <button
+            className="btn btn-sm text-muted p-0 border-0 bg-transparent"
+            style={{ textDecoration: "none" }}
+            onClick={onEditArtwork}
+          >
+            ✎
+          </button>
+        )}
         {currentUserId && onDeleteArtwork && (
           <button
             className="btn btn-sm text-danger p-0 border-0 bg-transparent"
