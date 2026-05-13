@@ -217,3 +217,11 @@ h2 {
   box-shadow: none !important;
   border-color: #7c6fa0 !important;
 }
+
+.form-control-sm:focus,
+input.form-control:focus,
+textarea.form-control:focus {
+  background-color: #1a1a2e !important;
+  box-shadow: none !important;
+  border-color: #7c6fa0 !important;
+}
