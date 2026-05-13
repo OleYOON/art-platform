@@ -265,3 +265,12 @@ textarea.form-control {
 .form-control::placeholder {
   color: #b9adcc !important;
 }
+
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active,
+.btn-outline-light:focus,
+.btn-outline-light:active,
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+  box-shadow: none !important;
+}
