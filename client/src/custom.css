@@ -244,3 +244,13 @@ textarea.form-control:focus {
 .text-center.mt-5 {
   color: #f0edf5 !important;
 }
+
+.container.mt-5 .form-control::placeholder,
+.container.mt-4 .form-control::placeholder {
+  color: #b9adcc !important;
+}
+
+.container.mt-5 .form-control,
+.container.mt-4 .form-control {
+  color: #f0edf5 !important;
+}
