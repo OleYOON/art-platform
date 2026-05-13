@@ -232,3 +232,11 @@ textarea.form-control:focus {
   box-shadow: none !important;
   border-color: #7c6fa0 !important;
 }
+
+.text-muted {
+  color: #b9adcc !important;
+}
+
+.text-center.text-muted {
+  color: #b9adcc !important;
+}
