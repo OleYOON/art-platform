@@ -36,7 +36,6 @@ export default function ProfilePage() {
   const [editTags, setEditTags] = useState("");
   const [editingProfile, setEditingProfile] = useState(false);
   const [editUsername, setEditUsername] = useState("");
-  const [editEmail, setEditEmail] = useState("");
   const [editBio, setEditBio] = useState("");
   const [editAvatar, setEditAvatar] = useState<File | null>(null);
   const token = localStorage.getItem("token");
@@ -94,7 +93,6 @@ export default function ProfilePage() {
   const startProfileEdit = () => {
     setEditingProfile(true);
     setEditUsername(user.username);
-    setEditEmail(user.email);
     setEditBio(bio);
     setEditAvatar(null);
   };
@@ -147,13 +145,12 @@ export default function ProfilePage() {
               </div>
             </div>
             <p><strong>Имя:</strong> {user.username}</p>
-            <p><strong>Email:</strong> {user.email}</p>
             <p><strong>Роль:</strong> {user.role}</p>
             <p><strong>О себе:</strong> {bio || "—"}</p>
             <button className="btn btn-primary btn-sm mt-2" onClick={startProfileEdit}>Редактировать профиль</button>
           </>
         ) : (
-          <>
+          <div className="mt-3">
             <div className="mb-3 text-center">
               <div style={{ width: 120, height: 120, overflow: "hidden", borderRadius: "50%", margin: "0 auto" }}>
                 <img
@@ -169,19 +166,17 @@ export default function ProfilePage() {
             </div>
             <div className="mb-2">
               <label className="form-label">Имя</label>
-              <input className="form-control form-control-sm" value={editUsername} onChange={(e) => setEditUsername(e.target.value)} />
-            </div>
-            <div className="mb-2">
-              <label className="form-label">Email</label>
-              <input className="form-control form-control-sm" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} disabled />
+              <input className="form-control form-control-sm" value={editUsername} onChange={(e) => setEditUsername(e.target.value)} style={{ boxShadow: "none" }} />
             </div>
             <div className="mb-2">
               <label className="form-label">О себе</label>
-              <textarea className="form-control form-control-sm" value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} />
+              <textarea className="form-control form-control-sm" value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} style={{ boxShadow: "none" }} />
             </div>
-            <button className="btn btn-success btn-sm me-2" onClick={handleProfileSave}>Сохранить</button>
-            <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditingProfile(false)}>Отмена</button>
-          </>
+            <div className="d-flex gap-2">
+              <button className="btn btn-success btn-sm" onClick={handleProfileSave}>Сохранить</button>
+              <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditingProfile(false)}>Отмена</button>
+            </div>
+          </div>
         )}
       </div>
 

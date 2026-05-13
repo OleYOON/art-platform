@@ -212,3 +212,8 @@ h2 {
 .comment-block .form-control::placeholder {
   color: #b9adcc !important;
 }
+
+.form-control:focus {
+  box-shadow: none !important;
+  border-color: #7c6fa0 !important;
+}
