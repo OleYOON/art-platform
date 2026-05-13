@@ -208,7 +208,11 @@ export default function ProfilePage() {
             {a.description && <p className="text-muted small mb-1">{a.description}</p>}
             {a.tags.length > 0 && (
               <p className="mb-0">
-                {a.tags.map(t => <span key={t} className="badge bg-secondary me-1">{t}</span>)}
+                {a.tags.map(t => (
+                  <span key={t} className="text-primary me-2" style={{ fontSize: "0.85rem", cursor: "pointer", textDecoration: "underline" }}>
+                    #{t}
+                  </span>
+                ))}
               </p>
             )}
           </div>
