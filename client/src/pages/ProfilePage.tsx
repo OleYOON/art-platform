@@ -173,8 +173,8 @@ export default function ProfilePage() {
               <textarea className="form-control form-control-sm" value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} style={{ boxShadow: "none" }} />
             </div>
             <div style={{ textAlign: "center" }}>
-              <button className="btn btn-outline-light btn-sm me-2" onClick={handleProfileSave}>Сохранить</button>
-              <button className="btn btn-outline-danger btn-sm" onClick={() => setEditingProfile(false)}>Отмена</button>
+              <button className="btn btn-success btn-sm me-2" onClick={handleProfileSave}>Сохранить</button>
+              <button className="btn btn-danger btn-sm" onClick={() => setEditingProfile(false)}>Отмена</button>
             </div>
           </div>
         )}
