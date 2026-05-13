@@ -172,7 +172,7 @@ export default function ProfilePage() {
               <label className="form-label">О себе</label>
               <textarea className="form-control form-control-sm" value={editBio} onChange={(e) => setEditBio(e.target.value)} rows={3} style={{ boxShadow: "none" }} />
             </div>
-            <div className="d-flex gap-2">
+            <div className="d-flex justify-content-center gap-2">
               <button className="btn btn-success btn-sm" onClick={handleProfileSave}>Сохранить</button>
               <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditingProfile(false)}>Отмена</button>
             </div>
@@ -218,7 +218,7 @@ export default function ProfilePage() {
               <textarea className="form-control form-control-sm mb-1" placeholder="Описание" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows={2} />
               <input className="form-control form-control-sm mb-2" placeholder="Теги (через запятую)" value={editTags} onChange={(e) => setEditTags(e.target.value)} />
               <button className="btn btn-success btn-sm me-2" onClick={() => handleEditSave(a.id)}>Сохранить</button>
-              <button className="btn btn-outline-secondary btn-sm" onClick={() => setEditId(null)}>Отмена</button>
+              <button className="btn btn-outline-danger btn-sm" onClick={() => setEditId(null)}>Отмена</button>
             </div>
           )}
 
