@@ -98,21 +98,18 @@ export default function ProfilePage() {
   };
 
   const handleProfileSave = async () => {
-    // Имя
     if (editUsername !== user.username) {
       await apiFetch(`/auth/me/username?username=${encodeURIComponent(editUsername)}`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
     }
-    // Описание
     if (editBio !== bio) {
       await apiFetch(`/auth/me?bio=${encodeURIComponent(editBio)}`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
     }
-    // Аватарка
     if (editAvatar) {
       const formData = new FormData();
       formData.append("file", editAvatar);
@@ -132,8 +129,12 @@ export default function ProfilePage() {
 
   return (
     <div className="container mt-4" style={{ maxWidth: 600 }}>
-      <Link to="/" className="btn btn-outline-secondary mb-3">← Назад</Link>
-      <h1>Профиль</h1>
+      {/* Шапка профиля */}
+      <div className="d-flex justify-content-between align-items-center mb-3 sticky-top" style={{ backgroundColor: "#2d2d44", padding: "10px 20px", borderRadius: "0 0 10px 10px" }}>
+        <Link to="/" className="btn btn-outline-secondary btn-sm">← Назад</Link>
+        <h1 style={{ fontSize: "1.3rem", margin: 0, color: "#f0edf5" }}>Профиль</h1>
+        <button className="btn btn-outline-danger btn-sm" onClick={() => { localStorage.removeItem("token"); navigate("/login"); }}>Выйти</button>
+      </div>
 
       {/* Карточка профиля */}
       <div className="card p-3 mb-3">
@@ -174,18 +175,15 @@ export default function ProfilePage() {
             </div>
             <div style={{ textAlign: "center" }}>
               <button className="btn btn-success btn-sm me-2" onClick={handleProfileSave}>Сохранить</button>
-              <button className="btn btn-danger btn-sm" onClick={() => setEditingProfile(false)}>Отмена</button>
+              <button className="btn btn-secondary btn-sm" onClick={() => setEditingProfile(false)}>Отмена</button>
             </div>
           </div>
         )}
       </div>
 
-      <button className="btn btn-outline-danger" onClick={() => { localStorage.removeItem("token"); navigate("/login"); }}>Выйти</button>
-
       <h2 className="mt-5">Мои работы</h2>
       {artworks.map((a) => (
         <div key={a.id} className="mb-4 border rounded">
-          {/* Шапка */}
           <div className="d-flex align-items-center p-2">
             <Link to={`/user/${a.user_id}`} className="text-decoration-none d-flex align-items-center">
               <div style={{ width: 36, height: 36, overflow: "hidden", borderRadius: "50%", marginRight: 10 }}>
@@ -218,7 +216,7 @@ export default function ProfilePage() {
               <textarea className="form-control form-control-sm mb-1" placeholder="Описание" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows={2} />
               <input className="form-control form-control-sm mb-2" placeholder="Теги (через запятую)" value={editTags} onChange={(e) => setEditTags(e.target.value)} />
               <button className="btn btn-success btn-sm me-2" onClick={() => handleEditSave(a.id)}>Сохранить</button>
-              <button className="btn btn-outline-danger btn-sm" onClick={() => setEditId(null)}>Отмена</button>
+              <button className="btn btn-secondary btn-sm" onClick={() => setEditId(null)}>Отмена</button>
             </div>
           )}
 
