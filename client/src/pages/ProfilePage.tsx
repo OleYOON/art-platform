@@ -148,7 +148,7 @@ export default function ProfilePage() {
             <p><strong>Имя:</strong> {user.username}</p>
             <p><strong>Роль:</strong> {user.role}</p>
             <p><strong>О себе:</strong> {bio || "—"}</p>
-            <button className="btn btn-primary btn-sm mt-2" onClick={startProfileEdit}>Редактировать профиль</button>
+            <button className="btn btn-outline-secondary btn-sm mt-2" onClick={startProfileEdit}>Редактировать профиль</button>
           </>
         ) : (
           <div className="mt-3">
@@ -183,7 +183,7 @@ export default function ProfilePage() {
 
       <h2 className="mt-5">Мои работы</h2>
       <div className="text-end mb-3">
-        <Link to="/upload" className="btn btn-outline-light btn-sm">+ Добавить работу</Link>
+        <Link to="/upload" className="btn btn-outline-secondary btn-sm">+ Добавить работу</Link>
       </div>
       {artworks.map((a) => (
         <div key={a.id} className="mb-4 border rounded">
