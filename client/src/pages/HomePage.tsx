@@ -75,9 +75,7 @@ export default function HomePage() {
             <input type="text" className="form-control" placeholder="Поиск..." value={search} onChange={e => setSearch(e.target.value)} />
             {search && <button className="btn btn-outline-secondary" onClick={() => setSearch("")}>✕</button>}
           </div>
-          <Link to="/upload" className="btn btn-outline-dark btn-sm me-2">+</Link>
           <Link to="/profile" className="btn btn-outline-dark btn-sm me-2">👤</Link>
-          <button className="btn btn-outline-danger btn-sm" onClick={() => { localStorage.removeItem("token"); window.location.href = "/login"; }}>Выйти</button>
         </div>
       </div>
 
