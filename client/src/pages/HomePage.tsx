@@ -68,14 +68,15 @@ export default function HomePage() {
 
   return (
     <div className="container" style={{ maxWidth: 600 }}>
-      <div className="d-flex justify-content-between align-items-center py-3 border-bottom mb-0 sticky-top">
-        <h4 className="m-0">paws</h4>
-        <div className="d-flex align-items-center">
-          <div className="input-group input-group-sm flex-grow-1 mx-auto" style={{ maxWidth: 300 }}>
-            <input type="text" className="form-control" placeholder="Поиск..." value={search} onChange={e => setSearch(e.target.value)} />
-            {search && <button className="btn btn-outline-secondary" onClick={() => setSearch("")}>✕</button>}
-          </div>
-          <Link to="/profile" className="btn btn-outline-dark btn-sm me-2">👤</Link>
+      {/* Шапка с поиском по центру */}
+      <div className="d-flex align-items-center justify-content-between py-3 border-bottom mb-0 sticky-top" style={{ backgroundColor: "#2d2d44", padding: "10px 20px", borderRadius: "0 0 10px 10px" }}>
+        <h4 className="m-0" style={{ color: "#f0edf5", width: 80 }}>paws</h4>
+        <div className="input-group input-group-sm" style={{ maxWidth: 300, width: "100%" }}>
+          <input type="text" className="form-control" placeholder="Поиск..." value={search} onChange={e => setSearch(e.target.value)} />
+          {search && <button className="btn btn-outline-secondary" onClick={() => setSearch("")}>✕</button>}
+        </div>
+        <div style={{ width: 80, textAlign: "right" }}>
+          <Link to="/profile" className="btn btn-outline-dark btn-sm">👤</Link>
         </div>
       </div>
 

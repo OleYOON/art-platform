@@ -182,7 +182,7 @@ export default function ProfilePage() {
       </div>
 
       <h2 className="mt-5">Мои работы</h2>
-      <div className="text-end mb-3">
+      <div className="text-center mb-3">
         <Link to="/upload" className="btn btn-outline-secondary btn-sm">Добавить работу</Link>
       </div>
       {artworks.map((a) => (
