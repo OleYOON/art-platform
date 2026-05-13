@@ -225,3 +225,10 @@ textarea.form-control:focus {
   box-shadow: none !important;
   border-color: #7c6fa0 !important;
 }
+
+.form-control:focus {
+  background-color: #1a1a2e !important;
+  color: #f0edf5 !important;
+  box-shadow: none !important;
+  border-color: #7c6fa0 !important;
+}
